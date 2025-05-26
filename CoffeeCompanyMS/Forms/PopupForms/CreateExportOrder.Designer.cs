@@ -28,42 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.locationSelector1 = new CoffeeCompanyMS.UC.LocationSelector();
-            this.label1 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.DTPDeliveryDate = new System.Windows.Forms.DateTimePicker();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
             this.dataGridViewIngredients = new System.Windows.Forms.DataGridView();
             this.IngredientColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.UnitColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.UnitPriceColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.QuantityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ActionColumn = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.locationSelector2 = new CoffeeCompanyMS.UC.LocationSelector();
+            this.storeBranchSelector1 = new CoffeeCompanyMS.UC.StoreBranchSelector();
+            this.warehouseSelector1 = new CoffeeCompanyMS.UC.WarehouseSelector();
+            this.btnSubmit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewIngredients)).BeginInit();
             this.SuspendLayout();
-            // 
-            // locationSelector1
-            // 
-            this.locationSelector1.Location = new System.Drawing.Point(119, -8);
-            this.locationSelector1.Margin = new System.Windows.Forms.Padding(0);
-            this.locationSelector1.Name = "locationSelector1";
-            this.locationSelector1.Size = new System.Drawing.Size(411, 63);
-            this.locationSelector1.TabIndex = 0;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(114, 35);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Current";
             // 
             // checkBox1
             // 
@@ -71,9 +50,9 @@
             this.checkBox1.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBox1.Location = new System.Drawing.Point(20, 137);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(171, 26);
+            this.checkBox1.Size = new System.Drawing.Size(178, 26);
             this.checkBox1.TabIndex = 2;
-            this.checkBox1.Text = "Enable Recurence";
+            this.checkBox1.Text = "Enable Recurrence";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // label2
@@ -111,25 +90,13 @@
             this.numericUpDown1.Size = new System.Drawing.Size(196, 22);
             this.numericUpDown1.TabIndex = 8;
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(14, 72);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(167, 35);
-            this.label4.TabIndex = 9;
-            this.label4.Text = "Destination";
-            // 
             // dataGridViewIngredients
             // 
             this.dataGridViewIngredients.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewIngredients.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.IngredientColumn,
             this.UnitColumn,
-            this.UnitPriceColumn,
-            this.QuantityColumn,
-            this.ActionColumn});
+            this.QuantityColumn});
             this.dataGridViewIngredients.Location = new System.Drawing.Point(12, 267);
             this.dataGridViewIngredients.Name = "dataGridViewIngredients";
             this.dataGridViewIngredients.RowHeadersWidth = 51;
@@ -152,14 +119,6 @@
             this.UnitColumn.ReadOnly = true;
             this.UnitColumn.Width = 125;
             // 
-            // UnitPriceColumn
-            // 
-            this.UnitPriceColumn.HeaderText = " Unit Price";
-            this.UnitPriceColumn.MinimumWidth = 6;
-            this.UnitPriceColumn.Name = "UnitPriceColumn";
-            this.UnitPriceColumn.ReadOnly = true;
-            this.UnitPriceColumn.Width = 125;
-            // 
             // QuantityColumn
             // 
             this.QuantityColumn.HeaderText = "Quantity";
@@ -167,36 +126,47 @@
             this.QuantityColumn.Name = "QuantityColumn";
             this.QuantityColumn.Width = 125;
             // 
-            // ActionColumn
+            // storeBranchSelector1
             // 
-            this.ActionColumn.HeaderText = "Action";
-            this.ActionColumn.MinimumWidth = 6;
-            this.ActionColumn.Name = "ActionColumn";
-            this.ActionColumn.Width = 125;
+            this.storeBranchSelector1.Location = new System.Drawing.Point(20, 66);
+            this.storeBranchSelector1.Margin = new System.Windows.Forms.Padding(0);
+            this.storeBranchSelector1.Name = "storeBranchSelector1";
+            this.storeBranchSelector1.Size = new System.Drawing.Size(600, 35);
+            this.storeBranchSelector1.TabIndex = 13;
             // 
-            // locationSelector2
+            // warehouseSelector1
             // 
-            this.locationSelector2.Location = new System.Drawing.Point(182, 55);
-            this.locationSelector2.Margin = new System.Windows.Forms.Padding(0);
-            this.locationSelector2.Name = "locationSelector2";
-            this.locationSelector2.Size = new System.Drawing.Size(405, 62);
-            this.locationSelector2.TabIndex = 12;
+            this.warehouseSelector1.Location = new System.Drawing.Point(20, 9);
+            this.warehouseSelector1.Margin = new System.Windows.Forms.Padding(0);
+            this.warehouseSelector1.Name = "warehouseSelector1";
+            this.warehouseSelector1.Size = new System.Drawing.Size(600, 35);
+            this.warehouseSelector1.TabIndex = 12;
+            // 
+            // btnSubmit
+            // 
+            this.btnSubmit.Location = new System.Drawing.Point(361, 436);
+            this.btnSubmit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnSubmit.Name = "btnSubmit";
+            this.btnSubmit.Size = new System.Drawing.Size(67, 35);
+            this.btnSubmit.TabIndex = 14;
+            this.btnSubmit.Text = "Submit";
+            this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
             // CreateExportOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.locationSelector2);
+            this.ClientSize = new System.Drawing.Size(800, 482);
+            this.Controls.Add(this.btnSubmit);
+            this.Controls.Add(this.storeBranchSelector1);
+            this.Controls.Add(this.warehouseSelector1);
             this.Controls.Add(this.dataGridViewIngredients);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.DTPDeliveryDate);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.locationSelector1);
             this.Name = "CreateExportOrder";
             this.Text = "CreateExportOrder";
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
@@ -207,21 +177,17 @@
         }
 
         #endregion
-
-        private UC.LocationSelector locationSelector1;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.DateTimePicker DTPDeliveryDate;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DataGridView dataGridViewIngredients;
+        private UC.WarehouseSelector warehouseSelector1;
+        private UC.StoreBranchSelector storeBranchSelector1;
         private System.Windows.Forms.DataGridViewComboBoxColumn IngredientColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn UnitColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UnitPriceColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn QuantityColumn;
-        private System.Windows.Forms.DataGridViewButtonColumn ActionColumn;
-        private UC.LocationSelector locationSelector2;
+        private System.Windows.Forms.Button btnSubmit;
     }
 }
