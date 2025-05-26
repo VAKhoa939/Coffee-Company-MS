@@ -11,6 +11,7 @@ using CoffeeCompanyMS.Models;
 using CoffeeCompanyMS.Patterns;
 using CoffeeCompanyMS.DAOs;
 using System.Data.SqlClient;
+using CoffeeCompanyMS.Forms.Authentication;
 
 namespace CoffeeCompanyMS.UI.Import
 {
@@ -216,35 +217,8 @@ namespace CoffeeCompanyMS.UI.Import
                     MessageBox.Show("Failed to create import order.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
-
-                // Insert transfer order items
-                bool allItemsSuccess = true;
-                foreach (var item in transferOrder.Items)
-                {
-                    bool itemSuccess = transferOrderItemDAO.InsertTransferOrderItem(
-                        quantity: item.Quantity,
-                        expirationDate: item.ExpirationDate,
-                        transferOrderId: transferOrder.Id,
-                        ingredientId: item.Ingredient.Id
-                    );
-
-                    if (!itemSuccess)
-                    {
-                        allItemsSuccess = false;
-                        break;
-                    }
-                }
-
-                if (allItemsSuccess)
-                {
-                    MessageBox.Show("Import order created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show("Failed to add items to import order.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show("Import order created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
             }
             catch (Exception ex)
             {

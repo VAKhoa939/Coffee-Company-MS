@@ -46,6 +46,7 @@ namespace CoffeeCompanyMS.UC.Pages.Storage
 
                 if (dataGridViewBatchSummary.Columns.Count > 0)
                 {
+                    dataGridViewBatchSummary.Columns["IngredientId"].Visible = false; // Hide the ID column
                     dataGridViewBatchSummary.Columns["IngredientName"].HeaderText = "Ingredient Name";
                     dataGridViewBatchSummary.Columns["NumberOfBatches"].HeaderText = "Number Of Batches";
                     dataGridViewBatchSummary.Columns["TotalQuantity"].HeaderText = "Total Quantity";
