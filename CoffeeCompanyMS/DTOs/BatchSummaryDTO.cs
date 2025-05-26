@@ -9,6 +9,7 @@ namespace CoffeeCompanyMS.DTOs
 {
     internal class BatchSummaryDTO
     {
+        public Guid IngredientId { get; set; }
         public string IngredientName { get; set; }
         public int NumberOfBatches { get; set; }
         public int TotalQuantity { get; set; }
@@ -17,6 +18,7 @@ namespace CoffeeCompanyMS.DTOs
 
         public BatchSummaryDTO(SqlDataReader reader)
         {
+            IngredientId = Guid.Parse(reader["IngredientID"].ToString());
             IngredientName = reader["IngredientName"].ToString();
             NumberOfBatches = Convert.ToInt32(reader["NumberOfBatches"]);
             TotalQuantity = Convert.ToInt32(reader["TotalQuantity"]);

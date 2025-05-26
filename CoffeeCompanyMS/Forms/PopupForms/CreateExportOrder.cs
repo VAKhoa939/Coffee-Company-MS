@@ -20,11 +20,14 @@ namespace CoffeeCompanyMS.UI.Export
         private Guid destinationLocationID;
         private List<TransferOrderItem> orderItems;
         private DataTable ingredientTable;
+        private Dictionary<Guid, List<Batch>> ingredientBatches;
 
         public CreateExportOrder()
         {
             InitializeComponent();
             orderItems = new List<TransferOrderItem>();
+            ingredientBatches = new Dictionary<Guid, List<Batch>>();
+            InitializeDataGridView();
             SetupEventHandlers();
         }
 
@@ -66,15 +69,6 @@ namespace CoffeeCompanyMS.UI.Export
                 ReadOnly = true
             });
 
-            dataGridViewIngredients.Columns.Add(new DataGridViewComboBoxColumn
-            {
-                Name = "AvailableBatches",
-                HeaderText = "Available Batches",
-                DataPropertyName = "AvailableBatches",
-                DisplayMember = "DisplayText",
-                ValueMember = "BatchId"
-            });
-
             dataGridViewIngredients.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "Quantity",
@@ -89,40 +83,49 @@ namespace CoffeeCompanyMS.UI.Export
                 DataPropertyName = "Unit",
                 ReadOnly = true
             });
+
+            dataGridViewIngredients.Columns.Add(new DataGridViewComboBoxColumn
+            {
+                Name = "AvailableBatches",
+                HeaderText = "Available Batches",
+                DataPropertyName = "AvailableBatches",
+                DisplayStyle = DataGridViewComboBoxDisplayStyle.DropDownButton,
+                ReadOnly = false
+            });
         }
 
         private void LoadIngredients()
         {
             try
             {
-                if (sourceLocationID == Guid.Empty) return;
-
                 var ingredientDAO = DAOManager.Instance.IngredientDAO;
                 var batchDAO = DAOManager.Instance.BatchDAO;
-                var ingredients = ingredientDAO.GetAllIngredients();
+                var ingredients = batchDAO.GetIngredientSummariesByLocation(sourceLocationID);
 
                 ingredientTable = new DataTable();
                 ingredientTable.Columns.Add("ID", typeof(Guid));
                 ingredientTable.Columns.Add("Name", typeof(string));
                 ingredientTable.Columns.Add("Unit", typeof(string));
                 ingredientTable.Columns.Add("Quantity", typeof(int));
-                ingredientTable.Columns.Add("AvailableBatches", typeof(List<BatchDisplayInfo>));
+                ingredientTable.Columns.Add("AvailableBatches", typeof(List<string>));
 
                 foreach (var ingredient in ingredients)
                 {
                     // Get available batches for this ingredient at the warehouse
-                    var batches = batchDAO.GetBatchesByIngredientAndLocation(ingredient.Id, sourceLocationID)
+                    var batches = batchDAO.GetBatchesByIngredientAndLocation(ingredient.IngredientId, sourceLocationID)
                         .Where(b => b.Quantity > 0)
-                        .Select(b => new BatchDisplayInfo
+                        .Select(b => 
                         {
-                            BatchId = b.Id,
-                            DisplayText = $"{b.Id} {b.Quantity} {b.ExpirationDate:dd/MM/yyyy}"
+                            return $"{b.Id} {b.Quantity} {b.ExpirationDate:dd/MM/yyyy}";
                         })
                         .ToList();
 
+                    var result = $"Ingredient: {ingredient.IngredientName}, Batches: {string.Join(", ", batches)}";
+                    MessageBox.Show(result, "Ingredient Batches", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
                     ingredientTable.Rows.Add(
-                        ingredient.Id,
-                        ingredient.Name,
+                        ingredient.IngredientId,
+                        ingredient.IngredientName,
                         ingredient.Unit,
                         0,
                         batches
@@ -130,8 +133,6 @@ namespace CoffeeCompanyMS.UI.Export
                 }
 
                 dataGridViewIngredients.DataSource = ingredientTable;
-
-                
                 dataGridViewIngredients.Enabled = true;
             }
             catch (Exception ex)
@@ -152,13 +153,13 @@ namespace CoffeeCompanyMS.UI.Export
             {
                 if (sourceLocationID == Guid.Empty)
                 {
-                    MessageBox.Show("Please select a source location.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Please select a source warehouse.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
                 if (destinationLocationID == Guid.Empty)
                 {
-                    MessageBox.Show("Please select a destination location.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Please select a destination store.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -175,42 +176,45 @@ namespace CoffeeCompanyMS.UI.Export
                     destinationID: destinationLocationID
                 );
 
-                // Get DAO instances
-                var transferOrderDAO = DAOManager.Instance.TransferOrderDAO;
-                var transferOrderItemDAO = DAOManager.Instance.TransferOrderItemDAO;
+                // Add items to transfer order and update batches
                 var batchDAO = DAOManager.Instance.BatchDAO;
-
-                // Add items to transfer order
-                foreach (DataGridViewRow row in dataGridViewIngredients.Rows)
+                foreach (DataRow row in ingredientTable.Rows)
                 {
-                    var quantity = Convert.ToInt32(row.Cells["Quantity"].Value);
+                    int quantity = Convert.ToInt32(row["Quantity"]);
                     if (quantity > 0)
                     {
-                        var ingredientId = (Guid)row.Cells["ID"].Value;
-                        var selectedBatch = (BatchDisplayInfo)((DataGridViewComboBoxCell)row.Cells["AvailableBatches"]).Value;
-                        
-                        if (selectedBatch == null)
-                        {
-                            MessageBox.Show($"Please select a batch for ingredient: {row.Cells["IngredientName"].Value}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-
-                        // Get the batch to check quantity
-                        var batch = batchDAO.GetBatchById(selectedBatch.BatchId);
-                        if (batch == null || batch.Quantity < quantity)
-                        {
-                            MessageBox.Show($"Insufficient quantity in selected batch for ingredient: {row.Cells["IngredientName"].Value}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-
+                        var ingredientId = (Guid)row["ID"];
                         var ingredient = DAOManager.Instance.IngredientDAO.GetIngredientById(ingredientId);
+
+                        // Get selected batch from AvailableBatches column
+                        string selectedBatch = row["AvailableBatches"].ToString();
+                        if (string.IsNullOrEmpty(selectedBatch))
+                        {
+                            MessageBox.Show($"Please select a batch for ingredient: {ingredient.Name}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
+
+                        // Parse batch ID from the selected batch string
+                        Guid batchId = Guid.Parse(selectedBatch.Split(' ')[0]);
+
+                        // Create transfer order item
                         var item = new TransferOrderItem(
                             id: Guid.NewGuid(),
                             quantity: quantity,
-                            expirationDate: batch.ExpirationDate,
+                            expirationDate: ingredientBatches[ingredientId].First(b => b.Id == batchId).ExpirationDate,
                             ingredient: ingredient
                         );
                         transferOrder.Items.Add(item);
+
+                        // Update batch quantity
+                        var batch = batchDAO.GetBatchById(batchId);
+                        batch.Quantity = 0; // Set to 0 since we're transferring all available quantity
+                        bool batchUpdated = batchDAO.UpdateBatch(batch);
+                        if (!batchUpdated)
+                        {
+                            MessageBox.Show($"Failed to update batch for ingredient: {ingredient.Name}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return;
+                        }
                     }
                 }
 
@@ -220,6 +224,10 @@ namespace CoffeeCompanyMS.UI.Export
                     return;
                 }
 
+                // Get DAO instances
+                var transferOrderDAO = DAOManager.Instance.TransferOrderDAO;
+                var transferOrderItemDAO = DAOManager.Instance.TransferOrderItemDAO;
+
                 // Insert transfer order
                 bool orderSuccess = transferOrderDAO.InsertTransferOrder(transferOrder);
                 if (!orderSuccess)
@@ -228,11 +236,10 @@ namespace CoffeeCompanyMS.UI.Export
                     return;
                 }
 
-                // Insert transfer order items and update batch quantities
+                // Insert transfer order items
                 bool allItemsSuccess = true;
                 foreach (var item in transferOrder.Items)
                 {
-                    // Insert transfer order item
                     bool itemSuccess = transferOrderItemDAO.InsertTransferOrderItem(
                         quantity: item.Quantity,
                         expirationDate: item.ExpirationDate,
@@ -244,26 +251,6 @@ namespace CoffeeCompanyMS.UI.Export
                     {
                         allItemsSuccess = false;
                         break;
-                    }
-
-                    // Update batch quantity
-                    var selectedBatch = ((DataGridViewComboBoxCell)dataGridViewIngredients.Rows
-                        .Cast<DataGridViewRow>()
-                        .First(r => (Guid)r.Cells["ID"].Value == item.Ingredient.Id)
-                        .Cells["AvailableBatches"]).Value as BatchDisplayInfo;
-
-                    if (selectedBatch != null)
-                    {
-                        var batch = batchDAO.GetBatchById(selectedBatch.BatchId);
-                        if (batch != null)
-                        {
-                            bool updateSuccess = batchDAO.UpdateBatchQuantity(batch.Id, batch.Quantity - item.Quantity);
-                            if (!updateSuccess)
-                            {
-                                allItemsSuccess = false;
-                                break;
-                            }
-                        }
                     }
                 }
 

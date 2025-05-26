@@ -95,6 +95,7 @@ namespace CoffeeCompanyMS.DAOs
         {
             string query = @"
                 SELECT 
+                    I.ID AS IngredientID,
                     I.Name AS IngredientName,
                     COUNT(B.ID) AS NumberOfBatches,
                     SUM(B.Quantity) AS TotalQuantity,
@@ -106,7 +107,7 @@ namespace CoffeeCompanyMS.DAOs
                     B.LocationID = @LocationID
                     AND B.ExpirationDate >= CAST(GETDATE() AS DATE)
                 GROUP BY 
-                    I.Name, I.Unit
+                    I.ID, I.Name, I.Unit
                 HAVING 
                     COUNT(B.ID) > 0";
 
@@ -182,23 +183,7 @@ namespace CoffeeCompanyMS.DAOs
                 ["@LocationID"] = locationId
             };
 
-            return ExecuteQuery(query, reader => new Batch(reader));
-        }
-
-        public bool UpdateBatchQuantity(Guid batchId, int newQuantity)
-        {
-            string query = @"
-                UPDATE Batch 
-                SET Quantity = @Quantity 
-                WHERE ID = @ID";
-
-            var parameters = new Dictionary<string, object>
-            {
-                ["@ID"] = batchId,
-                ["@Quantity"] = newQuantity
-            };
-
-            return ExecuteNonQuery(query, parameters);
+            return ExecuteQuery(query, reader => new Batch(reader, ingredientDAO.GetIngredientById), parameters);
         }
     }
 }
