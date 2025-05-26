@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace CoffeeCompanyMS.DAOs
 {
@@ -281,18 +282,39 @@ namespace CoffeeCompanyMS.DAOs
                             ["@DestinationID"] = order.DestinationID
                         };
 
-                        ExecuteNonQuery(query, parameters, transaction);
+                        using (var command = new SqlCommand(query, connection, transaction))
+                        {
+                            foreach (var param in parameters)
+                            {
+                                command.Parameters.AddWithValue(param.Key, param.Value);
+                            }
+                            command.ExecuteNonQuery();
+                        }
 
                         // Insert transfer order items
                         foreach (var item in order.Items)
                         {
-                            transferOrderItemDAO.InsertTransferOrderItem(
-                                item.Quantity,
-                                item.ExpirationDate,
-                                order.Id,
-                                item.Ingredient.Id,
-                                transaction
-                            );
+                            string itemQuery = @"
+                                INSERT INTO TransferOrderItem (ID, Quantity, ExpirationDate, TransferOrderID, IngredientID)
+                                VALUES (@ID, @Quantity, @ExpirationDate, @TransferOrderID, @IngredientID)";
+
+                            var itemParameters = new Dictionary<string, object>
+                            {
+                                ["@ID"] = item.Id,
+                                ["@Quantity"] = item.Quantity,
+                                ["@ExpirationDate"] = item.ExpirationDate,
+                                ["@TransferOrderID"] = order.Id,
+                                ["@IngredientID"] = item.Ingredient.Id
+                            };
+
+                            using (var command = new SqlCommand(itemQuery, connection, transaction))
+                            {
+                                foreach (var param in itemParameters)
+                                {
+                                    command.Parameters.AddWithValue(param.Key, param.Value);
+                                }
+                                command.ExecuteNonQuery();
+                            }
                         }
 
                         transaction.Commit();

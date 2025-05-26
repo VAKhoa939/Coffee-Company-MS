@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using CoffeeCompanyMS.Models;
 using CoffeeCompanyMS.Patterns;
 using CoffeeCompanyMS.DAOs;
+using System.Data.SqlClient;
 
 namespace CoffeeCompanyMS.UI.Import
 {
@@ -120,7 +121,8 @@ namespace CoffeeCompanyMS.UI.Import
                     status: "Pending",
                     recurrenceID: checkBox1.Checked ? Guid.NewGuid() : Guid.Empty,
                     recurrencePeriod: checkBox1.Checked ? (int)numericUpDown1.Value : 0,
-                    items: new List<TransferOrderItem>()
+                    items: new List<TransferOrderItem>(),
+                    destinationID: selectedLocationID
                 );
 
                 // Add items to transfer order
