@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\CoffeeCompanyMS",
+    "\\CoffeeCompanyMS\\DAOs",
+    "\\CoffeeCompanyMS\\DTOs",
+    "\\CoffeeCompanyMS\\Forms",
+    "\\CoffeeCompanyMS\\Models",
+    "\\CoffeeCompanyMS\\Patterns",
+    "\\CoffeeCompanyMS\\Properties",
+    "\\CoffeeCompanyMS\\Resources",
+    "\\CoffeeCompanyMS\\UC"
+  ],
+  "PreviewInSolutionExplorer": false
+}
