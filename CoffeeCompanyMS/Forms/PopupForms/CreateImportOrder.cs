@@ -205,11 +205,37 @@ namespace CoffeeCompanyMS.UI.Import
                     return;
                 }
 
-                // Save transfer order
+                // Get DAO instances
                 var transferOrderDAO = DAOManager.Instance.TransferOrderDAO;
-                bool success = transferOrderDAO.InsertTransferOrder(transferOrder);
+                var transferOrderItemDAO = DAOManager.Instance.TransferOrderItemDAO;
 
-                if (success)
+                // Insert transfer order
+                bool orderSuccess = transferOrderDAO.InsertTransferOrder(transferOrder);
+                if (!orderSuccess)
+                {
+                    MessageBox.Show("Failed to create import order.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Insert transfer order items
+                bool allItemsSuccess = true;
+                foreach (var item in transferOrder.Items)
+                {
+                    bool itemSuccess = transferOrderItemDAO.InsertTransferOrderItem(
+                        quantity: item.Quantity,
+                        expirationDate: item.ExpirationDate,
+                        transferOrderId: transferOrder.Id,
+                        ingredientId: item.Ingredient.Id
+                    );
+
+                    if (!itemSuccess)
+                    {
+                        allItemsSuccess = false;
+                        break;
+                    }
+                }
+
+                if (allItemsSuccess)
                 {
                     MessageBox.Show("Import order created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.DialogResult = DialogResult.OK;
@@ -217,7 +243,7 @@ namespace CoffeeCompanyMS.UI.Import
                 }
                 else
                 {
-                    MessageBox.Show("Failed to create import order.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to add items to import order.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
