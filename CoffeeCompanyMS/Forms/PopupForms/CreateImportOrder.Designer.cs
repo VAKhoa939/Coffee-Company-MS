@@ -114,17 +114,6 @@
             this.labeldate.TabIndex = 7;
             this.labeldate.Text = "label3";
             // 
-<<<<<<< Updated upstream
-=======
-            // locationSelector1
-            // 
-            this.locationSelector1.Location = new System.Drawing.Point(205, -10);
-            this.locationSelector1.Margin = new System.Windows.Forms.Padding(0);
-            this.locationSelector1.Name = "locationSelector1";
-            this.locationSelector1.Size = new System.Drawing.Size(462, 79);
-            this.locationSelector1.TabIndex = 0;
-            // 
->>>>>>> Stashed changes
             // label3
             // 
             this.label3.AutoSize = true;
@@ -137,22 +126,12 @@
             // 
             // comboBoxSuppliers
             // 
-<<<<<<< Updated upstream
             this.comboBoxSuppliers.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBoxSuppliers.FormattingEnabled = true;
             this.comboBoxSuppliers.Location = new System.Drawing.Point(259, 190);
             this.comboBoxSuppliers.Name = "comboBoxSuppliers";
             this.comboBoxSuppliers.Size = new System.Drawing.Size(273, 30);
             this.comboBoxSuppliers.TabIndex = 9;
-=======
-            this.comboBox1.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(291, 238);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(307, 33);
-            this.comboBox1.TabIndex = 9;
->>>>>>> Stashed changes
             // 
             // dataGridViewIngredients
             // 
@@ -265,12 +244,8 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-<<<<<<< Updated upstream
             this.ClientSize = new System.Drawing.Size(800, 578);
             this.Controls.Add(this.btnSubmit);
-=======
-            this.ClientSize = new System.Drawing.Size(900, 722);
->>>>>>> Stashed changes
             this.Controls.Add(this.label4);
             this.Controls.Add(this.dataGridViewIngredients);
             this.Controls.Add(this.comboBoxSuppliers);
