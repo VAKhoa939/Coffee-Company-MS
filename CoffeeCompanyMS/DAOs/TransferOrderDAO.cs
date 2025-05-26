@@ -258,74 +258,53 @@ namespace CoffeeCompanyMS.DAOs
 
         public bool InsertTransferOrder(TransferOrder order)
         {
-            using (var connection = ConnectionFactory.CreateConnection())
+            try
             {
-                connection.Open();
-                using (var transaction = connection.BeginTransaction())
+                // Insert the transfer order
+                string query = @"
+                    INSERT INTO TransferOrder (ID, OrderDate, EstimatedDeliveryDate, ActualDeliveryDate, Status, RecurrenceID, RecurrencePeriod, DestinationID)
+                    VALUES (@ID, @OrderDate, @EstimatedDeliveryDate, @ActualDeliveryDate, @Status, @RecurrenceID, @RecurrencePeriod, @DestinationID)";
+
+                var parameters = new Dictionary<string, object>
                 {
-                    try
+                    ["@ID"] = order.Id,
+                    ["@OrderDate"] = order.OrderDate,
+                    ["@EstimatedDeliveryDate"] = order.EstimatedDeliveryDate,
+                    ["@ActualDeliveryDate"] = (object)order.ActualDeliveryDate ?? DBNull.Value,
+                    ["@Status"] = order.Status,
+                    ["@RecurrenceID"] = order.RecurrenceID,
+                    ["@RecurrencePeriod"] = order.RecurrencePeriod,
+                    ["@DestinationID"] = order.DestinationID
+                };
+
+                bool success = ExecuteNonQuery(query, parameters);
+                if (!success) return false;
+
+                // Insert transfer order items
+                foreach (var item in order.Items)
+                {
+                    string itemQuery = @"
+                        INSERT INTO TransferOrderItem (ID, Quantity, ExpirationDate, TransferOrderID, IngredientID)
+                        VALUES (@ID, @Quantity, @ExpirationDate, @TransferOrderID, @IngredientID)";
+
+                    var itemParameters = new Dictionary<string, object>
                     {
-                        // Insert the transfer order
-                        string query = @"
-                            INSERT INTO TransferOrder (ID, OrderDate, EstimatedDeliveryDate, ActualDeliveryDate, Status, RecurrenceID, RecurrencePeriod, DestinationID)
-                            VALUES (@ID, @OrderDate, @EstimatedDeliveryDate, @ActualDeliveryDate, @Status, @RecurrenceID, @RecurrencePeriod, @DestinationID)";
+                        ["@ID"] = item.Id,
+                        ["@Quantity"] = item.Quantity,
+                        ["@ExpirationDate"] = item.ExpirationDate,
+                        ["@TransferOrderID"] = order.Id,
+                        ["@IngredientID"] = item.Ingredient.Id
+                    };
 
-                        var parameters = new Dictionary<string, object>
-                        {
-                            ["@ID"] = order.Id,
-                            ["@OrderDate"] = order.OrderDate,
-                            ["@EstimatedDeliveryDate"] = order.EstimatedDeliveryDate,
-                            ["@ActualDeliveryDate"] = (object)order.ActualDeliveryDate ?? DBNull.Value,
-                            ["@Status"] = order.Status,
-                            ["@RecurrenceID"] = order.RecurrenceID,
-                            ["@RecurrencePeriod"] = order.RecurrencePeriod,
-                            ["@DestinationID"] = order.DestinationID
-                        };
-
-                        using (var command = new SqlCommand(query, connection, transaction))
-                        {
-                            foreach (var param in parameters)
-                            {
-                                command.Parameters.AddWithValue(param.Key, param.Value);
-                            }
-                            command.ExecuteNonQuery();
-                        }
-
-                        // Insert transfer order items
-                        foreach (var item in order.Items)
-                        {
-                            string itemQuery = @"
-                                INSERT INTO TransferOrderItem (ID, Quantity, ExpirationDate, TransferOrderID, IngredientID)
-                                VALUES (@ID, @Quantity, @ExpirationDate, @TransferOrderID, @IngredientID)";
-
-                            var itemParameters = new Dictionary<string, object>
-                            {
-                                ["@ID"] = item.Id,
-                                ["@Quantity"] = item.Quantity,
-                                ["@ExpirationDate"] = item.ExpirationDate,
-                                ["@TransferOrderID"] = order.Id,
-                                ["@IngredientID"] = item.Ingredient.Id
-                            };
-
-                            using (var command = new SqlCommand(itemQuery, connection, transaction))
-                            {
-                                foreach (var param in itemParameters)
-                                {
-                                    command.Parameters.AddWithValue(param.Key, param.Value);
-                                }
-                                command.ExecuteNonQuery();
-                            }
-                        }
-
-                        transaction.Commit();
-                        return true;
-                    }
-                    catch (Exception)
-                    {
-                        transaction.Rollback();
-                        throw;
-                    }
+                    success = ExecuteNonQuery(itemQuery, itemParameters);
+                    if (!success) return false;
                 }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
