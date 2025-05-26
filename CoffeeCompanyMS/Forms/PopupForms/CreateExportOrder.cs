@@ -126,11 +126,6 @@ namespace CoffeeCompanyMS.UI.Export
             }
         }
 
-        private void DTPDeliveryDate_ValueChanged(object sender, EventArgs e)
-        {
-            labeldate.Text = DTPDeliveryDate.Value.ToString("yyyy-MM-dd");
-        }
-
         private void btnSubmit_Click(object sender, EventArgs e)
         {
             try
