@@ -25,7 +25,6 @@ namespace CoffeeCompanyMS.UI.Export
         {
             InitializeComponent();
             orderItems = new List<TransferOrderItem>();
-            InitializeDataGridView();
             SetupEventHandlers();
         }
 
@@ -54,66 +53,26 @@ namespace CoffeeCompanyMS.UI.Export
             };
         }
 
-        private void InitializeDataGridView()
-        {
-            dataGridViewIngredients.Columns.Clear();
-            dataGridViewIngredients.AutoGenerateColumns = false;
-
-            dataGridViewIngredients.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "IngredientName",
-                HeaderText = "Ingredient Name",
-                DataPropertyName = "Name",
-                ReadOnly = true
-            });
-
-            dataGridViewIngredients.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Quantity",
-                HeaderText = "Quantity",
-                DataPropertyName = "Quantity"
-            });
-
-            dataGridViewIngredients.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "Unit",
-                HeaderText = "Unit",
-                DataPropertyName = "Unit",
-                ReadOnly = true
-            });
-
-            dataGridViewIngredients.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "ExpirationDate",
-                HeaderText = "Expiration Date",
-                DataPropertyName = "ExpirationDate"
-            });
-        }
-
         private void LoadIngredients()
         {
             try
             {
                 if (sourceLocationID == Guid.Empty) return;
 
-                var ingredientDAO = DAOManager.Instance.IngredientDAO;
-                var ingredients = ingredientDAO.GetIngredientsByLocationId(sourceLocationID);
+                var batchDAO = DAOManager.Instance.BatchDAO;
+                var ingredients = batchDAO.GetIngredientSummariesByLocation(sourceLocationID);
 
                 ingredientTable = new DataTable();
-                ingredientTable.Columns.Add("ID", typeof(Guid));
                 ingredientTable.Columns.Add("Name", typeof(string));
                 ingredientTable.Columns.Add("Unit", typeof(string));
                 ingredientTable.Columns.Add("Quantity", typeof(int));
-                ingredientTable.Columns.Add("ExpirationDate", typeof(DateTime));
 
                 foreach (var ingredient in ingredients)
                 {
                     ingredientTable.Rows.Add(
-                        ingredient.Id,
-                        ingredient.Name,
+                        ingredient.IngredientName,
                         ingredient.Unit,
-                        0,
-                        DateTime.Now.AddMonths(1)
+                        ingredient.TotalQuantity
                     );
                 }
 
