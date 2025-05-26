@@ -63,9 +63,9 @@ namespace CoffeeCompanyMS.UI.Export
                 var ingredients = batchDAO.GetIngredientSummariesByLocation(sourceLocationID);
 
                 ingredientTable = new DataTable();
-                ingredientTable.Columns.Add("Name", typeof(string));
+                ingredientTable.Columns.Add("IngredientName", typeof(string));
                 ingredientTable.Columns.Add("Unit", typeof(string));
-                ingredientTable.Columns.Add("Quantity", typeof(int));
+                ingredientTable.Columns.Add("TotalQuantity", typeof(int));
 
                 foreach (var ingredient in ingredients)
                 {
@@ -77,6 +77,8 @@ namespace CoffeeCompanyMS.UI.Export
                 }
 
                 dataGridViewIngredients.DataSource = ingredientTable;
+
+                
                 dataGridViewIngredients.Enabled = true;
             }
             catch (Exception ex)

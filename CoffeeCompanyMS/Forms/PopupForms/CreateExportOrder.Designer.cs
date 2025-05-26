@@ -34,12 +34,9 @@
             this.DTPDeliveryDate = new System.Windows.Forms.DateTimePicker();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.dataGridViewIngredients = new System.Windows.Forms.DataGridView();
-            this.IngredientColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.UnitColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.QuantityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnSubmit = new System.Windows.Forms.Button();
             this.storeBranchSelector1 = new CoffeeCompanyMS.UC.StoreBranchSelector();
             this.warehouseSelector1 = new CoffeeCompanyMS.UC.WarehouseSelector();
-            this.btnSubmit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewIngredients)).BeginInit();
             this.SuspendLayout();
@@ -93,10 +90,6 @@
             // dataGridViewIngredients
             // 
             this.dataGridViewIngredients.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewIngredients.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.IngredientColumn,
-            this.UnitColumn,
-            this.QuantityColumn});
             this.dataGridViewIngredients.Location = new System.Drawing.Point(12, 267);
             this.dataGridViewIngredients.Name = "dataGridViewIngredients";
             this.dataGridViewIngredients.RowHeadersWidth = 51;
@@ -104,27 +97,16 @@
             this.dataGridViewIngredients.Size = new System.Drawing.Size(756, 150);
             this.dataGridViewIngredients.TabIndex = 11;
             // 
-            // IngredientColumn
+            // btnSubmit
             // 
-            this.IngredientColumn.HeaderText = "Ingredient Name";
-            this.IngredientColumn.MinimumWidth = 6;
-            this.IngredientColumn.Name = "IngredientColumn";
-            this.IngredientColumn.Width = 125;
-            // 
-            // UnitColumn
-            // 
-            this.UnitColumn.HeaderText = "Unit";
-            this.UnitColumn.MinimumWidth = 6;
-            this.UnitColumn.Name = "UnitColumn";
-            this.UnitColumn.ReadOnly = true;
-            this.UnitColumn.Width = 125;
-            // 
-            // QuantityColumn
-            // 
-            this.QuantityColumn.HeaderText = "Quantity";
-            this.QuantityColumn.MinimumWidth = 6;
-            this.QuantityColumn.Name = "QuantityColumn";
-            this.QuantityColumn.Width = 125;
+            this.btnSubmit.Location = new System.Drawing.Point(361, 436);
+            this.btnSubmit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnSubmit.Name = "btnSubmit";
+            this.btnSubmit.Size = new System.Drawing.Size(67, 35);
+            this.btnSubmit.TabIndex = 14;
+            this.btnSubmit.Text = "Submit";
+            this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
             // storeBranchSelector1
             // 
@@ -141,17 +123,6 @@
             this.warehouseSelector1.Name = "warehouseSelector1";
             this.warehouseSelector1.Size = new System.Drawing.Size(600, 35);
             this.warehouseSelector1.TabIndex = 12;
-            // 
-            // btnSubmit
-            // 
-            this.btnSubmit.Location = new System.Drawing.Point(361, 436);
-            this.btnSubmit.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btnSubmit.Name = "btnSubmit";
-            this.btnSubmit.Size = new System.Drawing.Size(67, 35);
-            this.btnSubmit.TabIndex = 14;
-            this.btnSubmit.Text = "Submit";
-            this.btnSubmit.UseVisualStyleBackColor = true;
-            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
             // 
             // CreateExportOrder
             // 
@@ -185,9 +156,6 @@
         private System.Windows.Forms.DataGridView dataGridViewIngredients;
         private UC.WarehouseSelector warehouseSelector1;
         private UC.StoreBranchSelector storeBranchSelector1;
-        private System.Windows.Forms.DataGridViewComboBoxColumn IngredientColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn UnitColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn QuantityColumn;
         private System.Windows.Forms.Button btnSubmit;
     }
 }
