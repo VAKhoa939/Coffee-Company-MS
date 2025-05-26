@@ -255,5 +255,57 @@ namespace CoffeeCompanyMS.DAOs
             return ExecuteQuery(query, reader => new ExportOrderSummary(reader), parameters);
         }
 
+        public bool InsertTransferOrder(TransferOrder order)
+        {
+            using (var connection = ConnectionFactory.CreateConnection())
+            {
+                connection.Open();
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        // Insert the transfer order
+                        string query = @"
+                            INSERT INTO TransferOrder (ID, OrderDate, EstimatedDeliveryDate, ActualDeliveryDate, Status, RecurrenceID, RecurrencePeriod, DestinationID)
+                            VALUES (@ID, @OrderDate, @EstimatedDeliveryDate, @ActualDeliveryDate, @Status, @RecurrenceID, @RecurrencePeriod, @DestinationID)";
+
+                        var parameters = new Dictionary<string, object>
+                        {
+                            ["@ID"] = order.Id,
+                            ["@OrderDate"] = order.OrderDate,
+                            ["@EstimatedDeliveryDate"] = order.EstimatedDeliveryDate,
+                            ["@ActualDeliveryDate"] = (object)order.ActualDeliveryDate ?? DBNull.Value,
+                            ["@Status"] = order.Status,
+                            ["@RecurrenceID"] = order.RecurrenceID,
+                            ["@RecurrencePeriod"] = order.RecurrencePeriod,
+                            ["@DestinationID"] = order.DestinationID
+                        };
+
+                        ExecuteNonQuery(query, parameters, transaction);
+
+                        // Insert transfer order items
+                        foreach (var item in order.Items)
+                        {
+                            transferOrderItemDAO.InsertTransferOrderItem(
+                                item.Quantity,
+                                item.ExpirationDate,
+                                order.Id,
+                                item.Ingredient.Id,
+                                transaction
+                            );
+                        }
+
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
     }
 }

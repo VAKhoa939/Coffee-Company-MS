@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace CoffeeCompanyMS.DAOs
 {
@@ -39,7 +40,7 @@ namespace CoffeeCompanyMS.DAOs
             return ExecuteQuery(query, reader => new TransferOrderItem(reader, ingredientDAO.GetIngredientById), parameters);
         }
 
-        public bool InsertTransferOrderItem(int quantity, DateTime expirationDate, Guid transferOrderId, Guid ingredientId)
+        public bool InsertTransferOrderItem(int quantity, DateTime expirationDate, Guid transferOrderId, Guid ingredientId, SqlTransaction transaction = null)
         {
             string query = @"
                 INSERT INTO TransferOrderItem (Quantity, ExpirationDate, TransferOrderID, IngredientID)
@@ -53,7 +54,7 @@ namespace CoffeeCompanyMS.DAOs
                 ["@IngredientID"] = ingredientId
             };
 
-            return ExecuteNonQuery(query, parameters);
+            return ExecuteNonQuery(query, parameters, transaction);
         }
 
         public bool UpdateTransferOrderItem(TransferOrderItem item)

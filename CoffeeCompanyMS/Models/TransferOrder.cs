@@ -16,10 +16,11 @@ namespace CoffeeCompanyMS.Models
         private string status;
         private Guid recurrenceID;
         private int recurrencePeriod;
-        private List<TransferOrderItem> items; 
+        private List<TransferOrderItem> items;
+        private Guid destinationID;
 
         // Constructor to create a TransferOrder object with specified values
-        public TransferOrder(Guid id, DateTime orderDate, DateTime estimatedDeliveryDate, DateTime? actualDeliveryDate, string status, Guid recurrenceID, int recurrencePeriod, List<TransferOrderItem> items)
+        public TransferOrder(Guid id, DateTime orderDate, DateTime estimatedDeliveryDate, DateTime? actualDeliveryDate, string status, Guid recurrenceID, int recurrencePeriod, List<TransferOrderItem> items, Guid destinationID)
         {
             this.id = id;
             this.orderDate = orderDate;
@@ -29,6 +30,7 @@ namespace CoffeeCompanyMS.Models
             this.recurrenceID = recurrenceID;
             this.recurrencePeriod = recurrencePeriod;
             this.items = items ?? new List<TransferOrderItem>();
+            this.destinationID = destinationID;
         }
 
         // Updated constructor to accept a loader function for Items
@@ -59,6 +61,11 @@ namespace CoffeeCompanyMS.Models
         public Guid RecurrenceID { get => recurrenceID; set => recurrenceID = value; }
         public int RecurrencePeriod { get => recurrencePeriod; set => recurrencePeriod = value; }
         public List<TransferOrderItem> Items { get => items; set => items = value; }
+        public Guid DestinationID
+        {
+            get => destinationID;
+            set => destinationID = value;
+        }
 
         // Method to add an item to the TransferOrder
         public void AddItem(TransferOrderItem item)
