@@ -40,7 +40,7 @@ namespace CoffeeCompanyMS.DAOs
             return ExecuteQuery(query, reader => new TransferOrderItem(reader, ingredientDAO.GetIngredientById), parameters);
         }
 
-        public bool InsertTransferOrderItem(int quantity, DateTime expirationDate, Guid transferOrderId, Guid ingredientId, SqlTransaction transaction = null)
+        public bool InsertTransferOrderItem(int quantity, DateTime expirationDate, Guid transferOrderId, Guid ingredientId)
         {
             string query = @"
                 INSERT INTO TransferOrderItem (Quantity, ExpirationDate, TransferOrderID, IngredientID)
@@ -54,7 +54,7 @@ namespace CoffeeCompanyMS.DAOs
                 ["@IngredientID"] = ingredientId
             };
 
-            return ExecuteNonQuery(query, parameters, transaction);
+            return ExecuteNonQuery(query, parameters);
         }
 
         public bool UpdateTransferOrderItem(TransferOrderItem item)
