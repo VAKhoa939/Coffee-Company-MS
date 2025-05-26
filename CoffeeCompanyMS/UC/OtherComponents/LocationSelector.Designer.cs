@@ -36,9 +36,9 @@
             // 
             this.labelLocation.AutoSize = true;
             this.labelLocation.Font = new System.Drawing.Font("Microsoft Tai Le", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelLocation.Location = new System.Drawing.Point(3, 17);
+            this.labelLocation.Location = new System.Drawing.Point(3, 21);
             this.labelLocation.Name = "labelLocation";
-            this.labelLocation.Size = new System.Drawing.Size(135, 35);
+            this.labelLocation.Size = new System.Drawing.Size(161, 43);
             this.labelLocation.TabIndex = 0;
             this.labelLocation.Text = "Location:";
             // 
@@ -46,21 +46,23 @@
             // 
             this.cbbLocation.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbbLocation.FormattingEnabled = true;
-            this.cbbLocation.Location = new System.Drawing.Point(144, 17);
+            this.cbbLocation.Location = new System.Drawing.Point(162, 21);
+            this.cbbLocation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cbbLocation.Name = "cbbLocation";
-            this.cbbLocation.Size = new System.Drawing.Size(241, 30);
+            this.cbbLocation.Size = new System.Drawing.Size(271, 33);
             this.cbbLocation.TabIndex = 1;
             this.cbbLocation.SelectedIndexChanged += new System.EventHandler(this.cbbLocation_SelectedIndexChanged);
             // 
             // LocationSelector
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.cbbLocation);
             this.Controls.Add(this.labelLocation);
+            this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "LocationSelector";
-            this.Size = new System.Drawing.Size(411, 63);
+            this.Size = new System.Drawing.Size(462, 79);
             this.Load += new System.EventHandler(this.LocationSelector_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -199,7 +199,6 @@
             this.Controls.Add(this.locationSelector1);
             this.Name = "CreateExportOrder";
             this.Text = "CreateExportOrder";
-            this.Load += new System.EventHandler(this.CreateExportOrder_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewIngredients)).EndInit();
             this.ResumeLayout(false);

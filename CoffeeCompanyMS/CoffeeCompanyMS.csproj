@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>CoffeeCompanyMS</RootNamespace>
     <AssemblyName>CoffeeCompanyMS</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -188,6 +188,18 @@
     </Compile>
     <Compile Include="UC\NavBars\StorageNavBar.Designer.cs">
       <DependentUpon>StorageNavBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\OtherComponents\StoreBranchSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\OtherComponents\StoreBranchSelector.Designer.cs">
+      <DependentUpon>StoreBranchSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\OtherComponents\WarehouseSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\OtherComponents\WarehouseSelector.Designer.cs">
+      <DependentUpon>WarehouseSelector.cs</DependentUpon>
     </Compile>
     <Compile Include="UC\Pages\Export\ExportOrderDetailsPage.cs">
       <SubType>UserControl</SubType>
