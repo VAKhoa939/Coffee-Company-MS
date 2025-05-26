@@ -165,5 +165,40 @@ namespace CoffeeCompanyMS.DAOs
 
             return ExecuteQuery(query, reader => new IngredientEventDTO(reader, "Wastage"), parameters);
         }
+
+        public List<Batch> GetBatchesByIngredientAndLocation(Guid ingredientId, Guid locationId)
+        {
+            string query = @"
+                SELECT b.* 
+                FROM Batch b
+                WHERE b.IngredientID = @IngredientID 
+                AND b.LocationID = @LocationID
+                AND b.Quantity > 0
+                ORDER BY b.ExpirationDate ASC";
+
+            var parameters = new Dictionary<string, object>
+            {
+                ["@IngredientID"] = ingredientId,
+                ["@LocationID"] = locationId
+            };
+
+            return ExecuteQuery(query, reader => new Batch(reader));
+        }
+
+        public bool UpdateBatchQuantity(Guid batchId, int newQuantity)
+        {
+            string query = @"
+                UPDATE Batch 
+                SET Quantity = @Quantity 
+                WHERE ID = @ID";
+
+            var parameters = new Dictionary<string, object>
+            {
+                ["@ID"] = batchId,
+                ["@Quantity"] = newQuantity
+            };
+
+            return ExecuteNonQuery(query, parameters);
+        }
     }
 }
