@@ -37,9 +37,8 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.DTPDeliveryDate = new System.Windows.Forms.DateTimePicker();
             this.labeldate = new System.Windows.Forms.Label();
-            this.locationSelector1 = new CoffeeCompanyMS.UC.LocationSelector();
             this.label3 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBoxSuppliers = new System.Windows.Forms.ComboBox();
             this.dataGridViewIngredients = new System.Windows.Forms.DataGridView();
             this.IngredientColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.UnitColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -47,6 +46,8 @@
             this.QuantityColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ActionColumn = new System.Windows.Forms.DataGridViewButtonColumn();
             this.label4 = new System.Windows.Forms.Label();
+            this.locationSelector1 = new CoffeeCompanyMS.UC.LocationSelector();
+            this.btnSubmit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewIngredients)).BeginInit();
             this.SuspendLayout();
@@ -110,14 +111,6 @@
             this.labeldate.TabIndex = 7;
             this.labeldate.Text = "label3";
             // 
-            // locationSelector1
-            // 
-            this.locationSelector1.Location = new System.Drawing.Point(182, -8);
-            this.locationSelector1.Margin = new System.Windows.Forms.Padding(0);
-            this.locationSelector1.Name = "locationSelector1";
-            this.locationSelector1.Size = new System.Drawing.Size(411, 63);
-            this.locationSelector1.TabIndex = 0;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -128,14 +121,14 @@
             this.label3.TabIndex = 8;
             this.label3.Text = "Supplier:";
             // 
-            // comboBox1
+            // comboBoxSuppliers
             // 
-            this.comboBox1.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(259, 190);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(273, 30);
-            this.comboBox1.TabIndex = 9;
+            this.comboBoxSuppliers.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.comboBoxSuppliers.FormattingEnabled = true;
+            this.comboBoxSuppliers.Location = new System.Drawing.Point(259, 190);
+            this.comboBoxSuppliers.Name = "comboBoxSuppliers";
+            this.comboBoxSuppliers.Size = new System.Drawing.Size(273, 30);
+            this.comboBoxSuppliers.TabIndex = 9;
             // 
             // dataGridViewIngredients
             // 
@@ -225,14 +218,33 @@
             this.label4.TabIndex = 11;
             this.label4.Text = "Destination";
             // 
+            // locationSelector1
+            // 
+            this.locationSelector1.Location = new System.Drawing.Point(182, -8);
+            this.locationSelector1.Margin = new System.Windows.Forms.Padding(0);
+            this.locationSelector1.Name = "locationSelector1";
+            this.locationSelector1.Size = new System.Drawing.Size(411, 63);
+            this.locationSelector1.TabIndex = 0;
+            // 
+            // btnSubmit
+            // 
+            this.btnSubmit.Location = new System.Drawing.Point(497, 440);
+            this.btnSubmit.Name = "btnSubmit";
+            this.btnSubmit.Size = new System.Drawing.Size(75, 23);
+            this.btnSubmit.TabIndex = 12;
+            this.btnSubmit.Text = "Submit";
+            this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
+            // 
             // CreateImportOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 578);
+            this.Controls.Add(this.btnSubmit);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.dataGridViewIngredients);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.comboBoxSuppliers);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.labeldate);
             this.Controls.Add(this.DTPDeliveryDate);
@@ -260,7 +272,7 @@
         private System.Windows.Forms.DateTimePicker DTPDeliveryDate;
         private System.Windows.Forms.Label labeldate;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBoxSuppliers;
         private System.Windows.Forms.DataGridView dataGridViewIngredients;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DataGridViewComboBoxColumn IngredientColumn;
@@ -268,5 +280,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn UnitPriceColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn QuantityColumn;
         private System.Windows.Forms.DataGridViewButtonColumn ActionColumn;
+        private System.Windows.Forms.Button btnSubmit;
     }
 }

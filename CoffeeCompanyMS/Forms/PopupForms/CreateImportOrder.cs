@@ -17,6 +17,7 @@ namespace CoffeeCompanyMS.UI.Import
     public partial class CreateImportOrder : Form
     {
         private Guid selectedLocationID;
+        private Guid selectedSupplierID;
         private List<TransferOrderItem> orderItems;
         private DataTable ingredientTable;
 
@@ -25,7 +26,36 @@ namespace CoffeeCompanyMS.UI.Import
             InitializeComponent();
             orderItems = new List<TransferOrderItem>();
             InitializeDataGridView();
-            LoadIngredients();
+            SetupEventHandlers();
+        }
+
+        private void SetupEventHandlers()
+        {
+            // Location selection handler
+            locationSelector1.SelectedItemChanged += (s, value) =>
+            {
+                selectedLocationID = value;
+                if (selectedLocationID != Guid.Empty)
+                {
+                    LoadSuppliers();
+                }
+            };
+
+            // Supplier selection handler
+            comboBoxSuppliers.SelectedIndexChanged += (s, e) =>
+            {
+                if (comboBoxSuppliers.SelectedValue != null)
+                {
+                    selectedSupplierID = (Guid)comboBoxSuppliers.SelectedValue;
+                    LoadIngredients();
+                }
+            };
+
+            // Recurrence checkbox handler
+            checkBox1.CheckedChanged += (s, e) =>
+            {
+                numericUpDown1.Enabled = checkBox1.Checked;
+            };
         }
 
         private void InitializeDataGridView()
@@ -64,12 +94,32 @@ namespace CoffeeCompanyMS.UI.Import
             });
         }
 
+        private void LoadSuppliers()
+        {
+            try
+            {
+                var supplierDAO = DAOManager.Instance.SupplierDAO;
+                var suppliers = supplierDAO.GetAllSuppliers();
+
+                comboBoxSuppliers.DisplayMember = "Name";
+                comboBoxSuppliers.ValueMember = "Id";
+                comboBoxSuppliers.DataSource = suppliers;
+                comboBoxSuppliers.Enabled = true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading suppliers: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void LoadIngredients()
         {
             try
             {
+                if (selectedSupplierID == Guid.Empty) return;
+
                 var ingredientDAO = DAOManager.Instance.IngredientDAO;
-                var ingredients = ingredientDAO.GetAllIngredients();
+                var ingredients = ingredientDAO.GetIngredientsBySupplierId(selectedSupplierID);
 
                 ingredientTable = new DataTable();
                 ingredientTable.Columns.Add("ID", typeof(Guid));
@@ -90,6 +140,7 @@ namespace CoffeeCompanyMS.UI.Import
                 }
 
                 dataGridViewIngredients.DataSource = ingredientTable;
+                dataGridViewIngredients.Enabled = true;
             }
             catch (Exception ex)
             {
@@ -109,6 +160,12 @@ namespace CoffeeCompanyMS.UI.Import
                 if (selectedLocationID == Guid.Empty)
                 {
                     MessageBox.Show("Please select a destination location.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                if (selectedSupplierID == Guid.Empty)
+                {
+                    MessageBox.Show("Please select a supplier.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -167,11 +224,6 @@ namespace CoffeeCompanyMS.UI.Import
             {
                 MessageBox.Show("Error creating import order: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void locationSelector1_SelectedItemChanged(object sender, Guid value)
-        {
-            selectedLocationID = value;
         }
     }
 }
