@@ -189,6 +189,18 @@
     <Compile Include="UC\NavBars\StorageNavBar.Designer.cs">
       <DependentUpon>StorageNavBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="UC\OtherComponents\StoreBranchSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\OtherComponents\StoreBranchSelector.Designer.cs">
+      <DependentUpon>StoreBranchSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UC\OtherComponents\WarehouseSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UC\OtherComponents\WarehouseSelector.Designer.cs">
+      <DependentUpon>WarehouseSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="UC\Pages\Export\ExportOrderDetailsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
