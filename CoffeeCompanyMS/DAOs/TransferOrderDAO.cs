@@ -267,6 +267,49 @@ namespace CoffeeCompanyMS.DAOs
             return ExecuteQuery(query, reader => new ExportOrderSummary(reader), parameters);
         }
 
+        public List<RecurringExportOrderDTO> GetActiveRecurringExportOrders(Guid locationId)
+        {
+            string query = @"
+                WITH Latest AS (
+                    SELECT 
+                        RecurrenceID, 
+                        MAX(OrderDate) AS LatestOrderDate
+                    FROM TransferOrder
+                    WHERE 
+                        DestinationID != @LocationID
+                        AND Status != 'RecurringStopped'
+                        AND RecurrenceID IS NOT NULL
+                    GROUP BY RecurrenceID
+                )
+                SELECT
+                    lo.RecurrenceID,
+                    'Store Branch ' + CAST(l.LocationIndex AS VARCHAR(10)) AS DestinationName,
+                    t.RecurrencePeriod,
+                    t.ID AS LatestOrderID,
+                    lo.LatestOrderDate,
+                    DATEADD(DAY, t.RecurrencePeriod, lo.LatestOrderDate) AS EstimatedNextOrderDate
+                FROM Latest lo
+                JOIN TransferOrder t
+                  ON t.RecurrenceID = lo.RecurrenceID
+                 AND t.OrderDate = lo.LatestOrderDate
+                JOIN Location l ON t.DestinationID = l.ID
+                WHERE t.RecurrenceID IS NOT NULL
+                GROUP BY
+                    lo.RecurrenceID,
+                    l.LocationIndex,
+                    t.RecurrencePeriod,
+                    t.ID,
+                    lo.LatestOrderDate";
+
+            var parameters = new Dictionary<string, object>
+            {
+                ["@LocationID"] = locationId
+            };
+
+            return ExecuteQuery(query, reader => new RecurringExportOrderDTO(reader), parameters);
+        }
+
+
         public bool InsertTransferOrder(TransferOrder order)
         {
             try

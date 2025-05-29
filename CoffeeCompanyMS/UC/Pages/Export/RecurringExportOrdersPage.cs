@@ -1,4 +1,5 @@
-﻿using CoffeeCompanyMS.Forms.Authentication;
+﻿using CoffeeCompanyMS.DTOs;
+using CoffeeCompanyMS.Forms.Authentication;
 using CoffeeCompanyMS.Models;
 using CoffeeCompanyMS.Patterns;
 using CoffeeCompanyMS.UI;
@@ -40,32 +41,42 @@ namespace CoffeeCompanyMS.UC.Pages.Export
         {
             try
             {
-                using (SqlConnection connection = UserSession.Instance.ConnectionFactory.CreateConnection())
+                var transferOrderDAO = DAOManager.Instance.TransferOrderDAO;
+                List<RecurringExportOrderDTO> exportOrders = transferOrderDAO.GetActiveRecurringExportOrders(selectedLocationID);
+
+                // Create a DataTable for display
+                DataTable dt = new DataTable();
+                dt.Columns.Add("RecurrenceID", typeof(Guid));
+                dt.Columns.Add("DestinationName", typeof(string));
+                dt.Columns.Add("RecurrencePeriod", typeof(int));
+                dt.Columns.Add("LatestOrderID", typeof(Guid));
+                dt.Columns.Add("LatestOrderDate", typeof(DateTime));
+                dt.Columns.Add("EstimatedNextOrderDate", typeof(DateTime));
+
+                foreach (var order in exportOrders)
                 {
-                    connection.Open();
+                    dt.Rows.Add(
+                        order.RecurrenceID,
+                        order.DestinationName,
+                        order.RecurrencePeriod,
+                        order.LatestOrderID,
+                        order.LatestOrderDate,
+                        order.EstimatedNextOrderDate
+                    );
+                }
 
-                    string query = "SELECT * FROM dbo.GetActiveRecurringExportOrders(@LocationID)";
+                // Bind the data to the DataGridView
+                dataGridViewRecurring.DataSource = dt;
 
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@LocationID", selectedLocationID);
-
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-
-                    // Bind the data to the DataGridView
-                    dataGridViewRecurring.DataSource = dt;
-
-                    if (dataGridViewRecurring.Columns.Count > 0)
-                    {
-                        dataGridViewRecurring.Columns["RecurrenceID"].HeaderText = "Recurrence ID";
-                        dataGridViewRecurring.Columns["DestinationName"].HeaderText = "Destination";
-                        dataGridViewRecurring.Columns["RecurrencePeriod"].HeaderText = "Recurrence Period (days)";
-                        dataGridViewRecurring.Columns["LatestOrderID"].HeaderText = "Latest Order ID";
-                        dataGridViewRecurring.Columns["LatestOrderDate"].HeaderText = "Latest Order Date";
-                        dataGridViewRecurring.Columns["EstimatedNextOrderDate"].HeaderText = "Estimated Next Order Date";
-                        AddCancelBtnColumn();
-                    }
+                if (dataGridViewRecurring.Columns.Count > 0)
+                {
+                    dataGridViewRecurring.Columns["RecurrenceID"].HeaderText = "Recurrence ID";
+                    dataGridViewRecurring.Columns["DestinationName"].HeaderText = "Destination";
+                    dataGridViewRecurring.Columns["RecurrencePeriod"].HeaderText = "Recurrence Period (days)";
+                    dataGridViewRecurring.Columns["LatestOrderID"].HeaderText = "Latest Order ID";
+                    dataGridViewRecurring.Columns["LatestOrderDate"].HeaderText = "Latest Order Date";
+                    dataGridViewRecurring.Columns["EstimatedNextOrderDate"].HeaderText = "Estimated Next Order Date";
+                    AddCancelBtnColumn();
                 }
             }
             catch (Exception ex)
@@ -73,6 +84,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
                 MessageBox.Show("Error loading recurring export orders: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void AddCancelBtnColumn()
         {
