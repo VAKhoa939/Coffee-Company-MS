@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DTOs\ExportOrderSummary.cs" />
+    <Compile Include="DTOs\RecurringExportOrderDTO.cs" />
     <Compile Include="DTOs\RecurringImportOrderDTO.cs" />
     <Compile Include="DTOs\BatchDetailsDTO.cs" />
     <Compile Include="DTOs\BatchSummaryDTO.cs" />

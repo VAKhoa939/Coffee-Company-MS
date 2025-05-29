@@ -47,7 +47,6 @@ namespace CoffeeCompanyMS.UC
             if (lbMode.Text == "EXPORT") return;
             lbMode.Text = "EXPORT";
             NavigationManager.ShowSubNav(new ExportNavBar());
-            NavigationManager.ShowPage(new ExportOrdersPage());
         }
 
         private void pbInformation_Click(object sender, EventArgs e)

@@ -35,7 +35,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
                 lblOrderID.Text = selectedOrderID.ToString();
                 lblSupplierName.Text = supplierDAO.GetImportSupplierName(selectedOrderID);
                 lblItemCount.Text = order.Items.Count.ToString();
-                lblTotalCost.Text = "$ " + order.CalculateTotalCost().ToString("C2"); // Assuming UnitPrice is in decimal format
+                lblTotalCost.Text = order.CalculateTotalCost().ToString("C2"); // Assuming UnitPrice is in decimal format
             }
             catch (Exception ex)
             {

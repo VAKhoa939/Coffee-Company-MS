@@ -34,9 +34,9 @@ namespace CoffeeCompanyMS.UC
         {
             // Check permissions before loading pages
             var user = UserSession.Instance.LoggedInUser;
-            if (user.Location == null)
+            if (user.Location != null)
             {
-                // If the user has no location (not a CompanyOwner or Admin),
+                // If the user has a location (not a CompanyOwner or Admin),
                 // disable the button to
                 // Reccuring Orders page and Create Import Order form
                 btnRecurringOrders.Enabled = false;

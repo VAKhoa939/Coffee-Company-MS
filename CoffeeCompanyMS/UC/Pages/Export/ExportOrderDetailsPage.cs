@@ -55,7 +55,7 @@ namespace CoffeeCompanyMS.UC.Pages.Export
             lblOrderID.Text = order.Id.ToString();
             lblDestinationName.Text = order.Destination.Name;
             lblItemCount.Text = order.Items.Count.ToString();
-            lblTotalCost.Text = "$ " + order.CalculateTotalCost().ToString("C2"); // Assuming UnitPrice is in decimal format
+            lblTotalCost.Text = order.CalculateTotalCost().ToString("C2"); // Assuming UnitPrice is in decimal format
         }
 
         // Method to load order details into the DataGridView

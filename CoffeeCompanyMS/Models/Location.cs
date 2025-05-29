@@ -27,7 +27,7 @@ namespace CoffeeCompanyMS.Models
             this.batches = batches ?? new List<Batch>();
 
             // Set the name based on the location index
-            this.name = locationIndex >= 0 ? $"Warehouse {-1 * locationIndex}" : $"Store Branch {locationIndex}";
+            this.name = locationIndex <= 0 ? $"Warehouse {-1 * locationIndex}" : $"Store Branch {locationIndex}";
         }
 
         // Constructor to create a Location object from a SqlDataReader and batch loader delegate
@@ -39,7 +39,7 @@ namespace CoffeeCompanyMS.Models
             this.maintenanceCost = Convert.ToDecimal(reader["MaintenanceCost"]);
 
             // Set the name based on the location index
-            this.name = locationIndex >= 0 ? $"Warehouse {-1 * locationIndex}" : $"Store Branch {locationIndex}";
+            this.name = locationIndex <= 0 ? $"Warehouse {-1 * locationIndex}" : $"Store Branch {locationIndex}";
 
             // Load batches using the delegate
             this.batches = loadBatches(id) ?? new List<Batch>();

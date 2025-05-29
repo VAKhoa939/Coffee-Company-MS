@@ -30,14 +30,14 @@
         {
             this.lblDestinationName = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.dgvExportItems = new System.Windows.Forms.DataGridView();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.lblOrderID = new System.Windows.Forms.Label();
+            this.lblTotalCost = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.lblItemCount = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.lblTotalCost = new System.Windows.Forms.Label();
+            this.lblOrderID = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.dgvExportItems = new System.Windows.Forms.DataGridView();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvExportItems)).BeginInit();
             this.SuspendLayout();
@@ -67,25 +67,55 @@
             this.panel1.Size = new System.Drawing.Size(656, 136);
             this.panel1.TabIndex = 2;
             // 
-            // dgvExportItems
+            // lblTotalCost
             // 
-            this.dgvExportItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvExportItems.Location = new System.Drawing.Point(67, 179);
-            this.dgvExportItems.Name = "dgvExportItems";
-            this.dgvExportItems.RowHeadersWidth = 51;
-            this.dgvExportItems.RowTemplate.Height = 24;
-            this.dgvExportItems.Size = new System.Drawing.Size(656, 313);
-            this.dgvExportItems.TabIndex = 3;
+            this.lblTotalCost.AutoSize = true;
+            this.lblTotalCost.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTotalCost.Location = new System.Drawing.Point(511, 99);
+            this.lblTotalCost.Name = "lblTotalCost";
+            this.lblTotalCost.Size = new System.Drawing.Size(65, 25);
+            this.lblTotalCost.TabIndex = 9;
+            this.lblTotalCost.Text = "label4";
             // 
-            // label1
+            // label4
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(23, 56);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(184, 26);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Destination Name";
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(317, 98);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(108, 26);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "Total Cost";
+            // 
+            // lblItemCount
+            // 
+            this.lblItemCount.AutoSize = true;
+            this.lblItemCount.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblItemCount.Location = new System.Drawing.Point(206, 99);
+            this.lblItemCount.Name = "lblItemCount";
+            this.lblItemCount.Size = new System.Drawing.Size(65, 25);
+            this.lblItemCount.TabIndex = 7;
+            this.lblItemCount.Text = "label3";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(23, 98);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(117, 26);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Item Count";
+            // 
+            // lblOrderID
+            // 
+            this.lblOrderID.AutoSize = true;
+            this.lblOrderID.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblOrderID.Location = new System.Drawing.Point(229, 14);
+            this.lblOrderID.Name = "lblOrderID";
+            this.lblOrderID.Size = new System.Drawing.Size(65, 25);
+            this.lblOrderID.TabIndex = 5;
+            this.lblOrderID.Text = "label1";
             // 
             // label2
             // 
@@ -97,55 +127,25 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "Order ID";
             // 
-            // lblOrderID
+            // label1
             // 
-            this.lblOrderID.AutoSize = true;
-            this.lblOrderID.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblOrderID.Location = new System.Drawing.Point(229, 15);
-            this.lblOrderID.Name = "lblOrderID";
-            this.lblOrderID.Size = new System.Drawing.Size(65, 25);
-            this.lblOrderID.TabIndex = 5;
-            this.lblOrderID.Text = "label1";
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(23, 56);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(184, 26);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Destination Name";
             // 
-            // lblItemCount
+            // dgvExportItems
             // 
-            this.lblItemCount.AutoSize = true;
-            this.lblItemCount.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblItemCount.Location = new System.Drawing.Point(568, 15);
-            this.lblItemCount.Name = "lblItemCount";
-            this.lblItemCount.Size = new System.Drawing.Size(65, 25);
-            this.lblItemCount.TabIndex = 7;
-            this.lblItemCount.Text = "label3";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(360, 14);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(117, 26);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Item Count";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(360, 57);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(108, 26);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "Total Cost";
-            // 
-            // lblTotalCost
-            // 
-            this.lblTotalCost.AutoSize = true;
-            this.lblTotalCost.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTotalCost.Location = new System.Drawing.Point(568, 58);
-            this.lblTotalCost.Name = "lblTotalCost";
-            this.lblTotalCost.Size = new System.Drawing.Size(65, 25);
-            this.lblTotalCost.TabIndex = 9;
-            this.lblTotalCost.Text = "label4";
+            this.dgvExportItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvExportItems.Location = new System.Drawing.Point(67, 179);
+            this.dgvExportItems.Name = "dgvExportItems";
+            this.dgvExportItems.RowHeadersWidth = 51;
+            this.dgvExportItems.RowTemplate.Height = 24;
+            this.dgvExportItems.Size = new System.Drawing.Size(656, 313);
+            this.dgvExportItems.TabIndex = 3;
             // 
             // ExportOrderDetailsPage
             // 
