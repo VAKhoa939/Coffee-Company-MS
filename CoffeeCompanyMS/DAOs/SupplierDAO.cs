@@ -92,5 +92,27 @@ namespace CoffeeCompanyMS.DAOs
 
             return ExecuteNonQuery(query, parameters);
         }
+
+        /// <summary>
+        /// Get the name of the supplier for a given import order.
+        /// </summary>
+        public string GetImportSupplierName(Guid importOrderId)
+        {
+            string query = @"
+                SELECT TOP 1 s.Name
+                FROM TransferOrder t
+                JOIN TransferOrderItem toi ON t.ID = toi.TransferOrderID
+                JOIN Ingredient i ON toi.IngredientID = i.ID
+                JOIN Supplier s ON i.SupplierID = s.ID
+                WHERE t.ID = @ImportOrderID";
+
+            var parameters = new Dictionary<string, object>
+            {
+                ["@ImportOrderID"] = importOrderId
+            };
+
+            var result = ExecuteScalar(query, parameters);
+            return result != null ? result.ToString() : null;
+        }
     }
 }

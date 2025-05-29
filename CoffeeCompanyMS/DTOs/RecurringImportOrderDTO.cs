@@ -16,10 +16,10 @@ namespace CoffeeCompanyMS.DTOs
         public DateTime LatestOrderDate { get; }
         public DateTime EstimatedNextOrderDate { get; }
 
-        public RecurringImportOrderDTO(SqlDataReader reader)
+        public RecurringImportOrderDTO(SqlDataReader reader, Func<Guid, string> getSupplierName)
         {
             RecurrenceID = reader.GetGuid(reader.GetOrdinal("RecurrenceID"));
-            SupplierName = reader.GetString(reader.GetOrdinal("SupplierName"));
+            SupplierName = getSupplierName(LatestOrderID);
             RecurrencePeriod = reader.GetInt32(reader.GetOrdinal("RecurrencePeriod"));
             LatestOrderID = reader.GetGuid(reader.GetOrdinal("LatestOrderID"));
             LatestOrderDate = reader.GetDateTime(reader.GetOrdinal("LatestOrderDate"));

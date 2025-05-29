@@ -72,9 +72,11 @@
             this.dataGridViewImportOrder.TabIndex = 5;
             this.dataGridViewImportOrder.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewImportOrder_CellDoubleClick);
             this.dataGridViewImportOrder.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewImportOrder_CellValueChanged);
+            this.dataGridViewImportOrder.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dataGridViewImportOrder_EditingControlShowing);
             // 
             // locationSelector1
             // 
+            this.locationSelector1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.locationSelector1.Location = new System.Drawing.Point(45, 21);
             this.locationSelector1.Margin = new System.Windows.Forms.Padding(0);
             this.locationSelector1.Name = "locationSelector1";

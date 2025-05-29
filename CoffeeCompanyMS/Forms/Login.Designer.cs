@@ -34,7 +34,6 @@
             this.textBoxGmail = new System.Windows.Forms.TextBox();
             this.labelPassword = new System.Windows.Forms.Label();
             this.textBoxPassword = new System.Windows.Forms.TextBox();
-            this.comboBoxServers = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // btnLogin
@@ -96,21 +95,11 @@
             this.textBoxPassword.TabIndex = 5;
             this.textBoxPassword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBoxPassword_KeyDown);
             // 
-            // comboBoxServers
-            // 
-            this.comboBoxServers.FormattingEnabled = true;
-            this.comboBoxServers.Location = new System.Drawing.Point(524, 55);
-            this.comboBoxServers.Name = "comboBoxServers";
-            this.comboBoxServers.Size = new System.Drawing.Size(169, 24);
-            this.comboBoxServers.TabIndex = 6;
-            this.comboBoxServers.SelectedIndexChanged += new System.EventHandler(this.comboBoxServers_SelectedIndexChanged);
-            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.comboBoxServers);
             this.Controls.Add(this.textBoxPassword);
             this.Controls.Add(this.labelPassword);
             this.Controls.Add(this.textBoxGmail);
@@ -133,6 +122,5 @@
         private System.Windows.Forms.TextBox textBoxGmail;
         private System.Windows.Forms.Label labelPassword;
         private System.Windows.Forms.TextBox textBoxPassword;
-        private System.Windows.Forms.ComboBox comboBoxServers;
     }
 }

@@ -12,16 +12,22 @@ namespace CoffeeCompanyMS.DAOs
     internal class TransferOrderDAO : BaseDAO
     {
         private readonly TransferOrderItemDAO transferOrderItemDAO;
+        private readonly SupplierDAO supplierDAO;
+        private readonly LocationDAO locationDAO;
 
-        public TransferOrderDAO(TransferOrderItemDAO transferOrderItemDAO)
+        public TransferOrderDAO(TransferOrderItemDAO transferOrderItemDAO, SupplierDAO supplierDAO, LocationDAO locationDAO)
         {
             this.transferOrderItemDAO = transferOrderItemDAO;
+            this.supplierDAO = supplierDAO;
+            this.locationDAO = locationDAO;
         }
 
         public List<TransferOrder> GetAllTransferOrders()
         {
             string query = "SELECT * FROM TransferOrder ORDER BY OrderDate DESC";
-            return ExecuteQuery(query, reader => new TransferOrder(reader, transferOrderItemDAO.GetItemsByTransferOrderId));
+            return ExecuteQuery(query, reader => new TransferOrder(reader, 
+                transferOrderItemDAO.GetItemsByTransferOrderId,
+                locationDAO.GetLocationById));
         }
 
         public TransferOrder GetTransferOrderById(Guid id)
@@ -29,7 +35,9 @@ namespace CoffeeCompanyMS.DAOs
             string query = "SELECT * FROM TransferOrder WHERE ID = @ID";
             var parameters = new Dictionary<string, object> { ["@ID"] = id };
 
-            var result = ExecuteQuery(query, reader => new TransferOrder(reader, transferOrderItemDAO.GetItemsByTransferOrderId), parameters);
+            var result = ExecuteQuery(query, reader => new TransferOrder(reader, 
+                transferOrderItemDAO.GetItemsByTransferOrderId,
+                locationDAO.GetLocationById), parameters);
             return result.Count > 0 ? result[0] : null;
         }
 
@@ -44,12 +52,14 @@ namespace CoffeeCompanyMS.DAOs
                 ["@DestinationID"] = destinationId
             };
 
-            return ExecuteQuery(query, reader => new TransferOrder(reader, transferOrderItemDAO.GetItemsByTransferOrderId), parameters);
+            return ExecuteQuery(query, reader => new TransferOrder(reader, 
+                transferOrderItemDAO.GetItemsByTransferOrderId,
+                locationDAO.GetLocationById), parameters);
         }
 
         // Insert with all fields including RecurrenceID
         // used for re-newing recurring orders
-        public bool InsertTransferOrder(DateTime orderDate, DateTime estimatedDeliveryDate, DateTime? actualDeliveryDate, string status, Guid recurrenceId, int recurrencePeriod, Guid destinationId)
+        public bool InsertTransferOrder(DateTime orderDate, DateTime estimatedDeliveryDate, string status, Guid recurrenceId, int recurrencePeriod, Guid destinationId)
         {
             string query = @"
         INSERT INTO TransferOrder (OrderDate, EstimatedDeliveryDate, ActualDeliveryDate, Status, RecurrenceID, RecurrencePeriod, DestinationID)
@@ -59,7 +69,6 @@ namespace CoffeeCompanyMS.DAOs
             {
                 ["@OrderDate"] = orderDate,
                 ["@EstimatedDeliveryDate"] = estimatedDeliveryDate,
-                ["@ActualDeliveryDate"] = actualDeliveryDate.HasValue ? (object)actualDeliveryDate.Value : DBNull.Value,
                 ["@Status"] = status,
                 ["@RecurrenceID"] = recurrenceId,
                 ["@RecurrencePeriod"] = recurrencePeriod,
@@ -169,30 +178,28 @@ namespace CoffeeCompanyMS.DAOs
         {
             string query = @"
                 SELECT 
-                    t.ID AS OrderID,
-                    ISNULL(CAST(t.RecurrenceID AS VARCHAR(50)), 'No Recurrence') AS RecurrenceID,
-                    s.Name AS SupplierName,
-                    t.OrderDate,
-                    t.EstimatedDeliveryDate,
-                    ISNULL(CAST(t.ActualDeliveryDate AS VARCHAR(50)), 'NaN') AS ActualDeliveryDate,
-                    t.Status
-                FROM TransferOrder t
-                JOIN TransferOrderItem toi ON t.ID = toi.TransferOrderID
-                JOIN Ingredient i ON toi.IngredientID = i.ID
-                JOIN Supplier s ON i.SupplierID = s.ID
-                WHERE 
-                    t.DestinationID = @LocationID
-                    AND t.Status IN ('Pending', 'Delayed', 'Delivered')
-                GROUP BY 
-                    t.ID, t.RecurrenceID, s.Name, t.OrderDate, 
-                    t.EstimatedDeliveryDate, t.ActualDeliveryDate, t.Status";
+                t.ID AS OrderID,
+                ISNULL(CAST(t.RecurrenceID AS VARCHAR(50)), 'No Recurrence') AS RecurrenceID,
+                t.OrderDate,
+                t.EstimatedDeliveryDate,
+                ISNULL(CAST(t.ActualDeliveryDate AS VARCHAR(50)), 'NaN') AS ActualDeliveryDate,
+                t.Status
+            FROM TransferOrder t
+            JOIN TransferOrderItem toi ON t.ID = toi.TransferOrderID
+            JOIN Ingredient i ON toi.IngredientID = i.ID
+            WHERE 
+                t.DestinationID = @LocationID
+                AND t.Status IN ('Pending', 'Delayed', 'Delivered')
+            GROUP BY 
+                t.ID, t.RecurrenceID, t.OrderDate, 
+                t.EstimatedDeliveryDate, t.ActualDeliveryDate, t.Status";
 
             var parameters = new Dictionary<string, object>
             {
                 { "@LocationID", locationId }
             };
 
-            return ExecuteQuery(query, reader => new ImportOrderDTO(reader), parameters);
+            return ExecuteQuery(query, reader => new ImportOrderDTO(reader, supplierDAO.GetImportSupplierName), parameters);
         }
 
         public List<RecurringImportOrderDTO> GetActiveRecurringImportOrders(Guid locationId)
@@ -200,21 +207,17 @@ namespace CoffeeCompanyMS.DAOs
             string query = @"
                 WITH Latest AS (
                     SELECT 
-                        RecurrenceID, 
-                        MAX(OrderDate) AS LatestOrderDate
-                    FROM TransferOrder
-                    WHERE 
-                        DestinationID = @LocationID
-                        AND Status != 'RecurringStopped'
-                        AND RecurrenceID IS NOT NULL
-                    GROUP BY RecurrenceID
+                    RecurrenceID, 
+                    MAX(OrderDate) AS LatestOrderDate
+                FROM TransferOrder
+                WHERE 
+                    DestinationID = @LocationID
+                    AND Status != 'RecurringStopped'
+                    AND RecurrenceID IS NOT NULL
+                GROUP BY RecurrenceID
                 )
                 SELECT
                     lo.RecurrenceID,
-                    (SELECT s.Name
-                     FROM Supplier s
-                     JOIN TransferOrder t2 ON s.ID = s.ID
-                     WHERE t2.ID = t.ID) AS SupplierName,
                     t.RecurrencePeriod,
                     t.ID AS LatestOrderID,
                     lo.LatestOrderDate,
@@ -222,14 +225,22 @@ namespace CoffeeCompanyMS.DAOs
                 FROM Latest lo
                 JOIN TransferOrder t
                   ON t.RecurrenceID = lo.RecurrenceID
-                 AND t.OrderDate = lo.LatestOrderDate";
+                 AND t.OrderDate = lo.LatestOrderDate
+                JOIN TransferOrderItem toi ON t.ID = toi.TransferOrderID
+                JOIN Ingredient i ON toi.IngredientID = i.ID
+                GROUP BY
+                    lo.RecurrenceID,
+                    t.RecurrencePeriod,
+                    t.ID,
+                    lo.LatestOrderDate,
+                    t.RecurrencePeriod";
 
             var parameters = new Dictionary<string, object>
             {
                 ["@LocationID"] = locationId
             };
 
-            return ExecuteQuery(query, reader => new RecurringImportOrderDTO(reader), parameters);
+            return ExecuteQuery(query, reader => new RecurringImportOrderDTO(reader, supplierDAO.GetImportSupplierName), parameters);
         }
 
         public List<ExportOrderSummary> GetExportOrderSummariesByLocationId(Guid locationId)
@@ -260,43 +271,23 @@ namespace CoffeeCompanyMS.DAOs
         {
             try
             {
-                // Insert the transfer order
-                string query = @"
-                    INSERT INTO TransferOrder (ID, OrderDate, EstimatedDeliveryDate, ActualDeliveryDate, Status, RecurrenceID, RecurrencePeriod, DestinationID)
-                    VALUES (@ID, @OrderDate, @EstimatedDeliveryDate, @ActualDeliveryDate, @Status, @RecurrenceID, @RecurrencePeriod, @DestinationID)";
-
-                var parameters = new Dictionary<string, object>
-                {
-                    ["@ID"] = order.Id,
-                    ["@OrderDate"] = order.OrderDate,
-                    ["@EstimatedDeliveryDate"] = order.EstimatedDeliveryDate,
-                    ["@ActualDeliveryDate"] = (object)order.ActualDeliveryDate ?? DBNull.Value,
-                    ["@Status"] = order.Status,
-                    ["@RecurrenceID"] = order.RecurrenceID,
-                    ["@RecurrencePeriod"] = order.RecurrencePeriod,
-                    ["@DestinationID"] = order.DestinationID
-                };
-
-                bool success = ExecuteNonQuery(query, parameters);
+                bool success = InsertTransferOrder(
+                    order.OrderDate,
+                    order.EstimatedDeliveryDate,
+                    order.Status,
+                    order.RecurrenceID,
+                    order.RecurrencePeriod,
+                    order.Destination.Id);
                 if (!success) return false;
 
                 // Insert transfer order items
                 foreach (var item in order.Items)
                 {
-                    string itemQuery = @"
-                        INSERT INTO TransferOrderItem (ID, Quantity, ExpirationDate, TransferOrderID, IngredientID)
-                        VALUES (@ID, @Quantity, @ExpirationDate, @TransferOrderID, @IngredientID)";
-
-                    var itemParameters = new Dictionary<string, object>
-                    {
-                        ["@ID"] = item.Id,
-                        ["@Quantity"] = item.Quantity,
-                        ["@ExpirationDate"] = item.ExpirationDate,
-                        ["@TransferOrderID"] = order.Id,
-                        ["@IngredientID"] = item.Ingredient.Id
-                    };
-
-                    success = ExecuteNonQuery(itemQuery, itemParameters);
+                    success = transferOrderItemDAO.InsertTransferOrderItem(
+                        item.Quantity,
+                        item.ExpirationDate,
+                        order.Id,
+                        item.Ingredient.Id);
                     if (!success) return false;
                 }
 

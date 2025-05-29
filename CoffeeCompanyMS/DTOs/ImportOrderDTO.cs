@@ -17,11 +17,11 @@ namespace CoffeeCompanyMS.DTOs
         public string ActualDeliveryDate { get; }
         public string Status { get; }
 
-        public ImportOrderDTO(SqlDataReader reader)
+        public ImportOrderDTO(SqlDataReader reader, Func<Guid, string> getSupplierName)
         {
             OrderID = reader.GetGuid(reader.GetOrdinal("OrderID"));
             RecurrenceID = reader["RecurrenceID"].ToString();
-            SupplierName = reader["SupplierName"].ToString();
+            SupplierName = getSupplierName(OrderID);
             OrderDate = reader.GetDateTime(reader.GetOrdinal("OrderDate"));
             EstimatedDeliveryDate = reader.GetDateTime(reader.GetOrdinal("EstimatedDeliveryDate"));
             ActualDeliveryDate = reader["ActualDeliveryDate"].ToString();

@@ -17,10 +17,10 @@ namespace CoffeeCompanyMS.Models
         private Guid recurrenceID;
         private int recurrencePeriod;
         private List<TransferOrderItem> items;
-        private Guid destinationID;
+        private Location destination;
 
         // Constructor to create a TransferOrder object with specified values
-        public TransferOrder(Guid id, DateTime orderDate, DateTime estimatedDeliveryDate, DateTime? actualDeliveryDate, string status, Guid recurrenceID, int recurrencePeriod, List<TransferOrderItem> items, Guid destinationID)
+        public TransferOrder(Guid id, DateTime orderDate, DateTime estimatedDeliveryDate, DateTime? actualDeliveryDate, string status, Guid recurrenceID, int recurrencePeriod, List<TransferOrderItem> items, Location destination)
         {
             this.id = id;
             this.orderDate = orderDate;
@@ -30,11 +30,14 @@ namespace CoffeeCompanyMS.Models
             this.recurrenceID = recurrenceID;
             this.recurrencePeriod = recurrencePeriod;
             this.items = items ?? new List<TransferOrderItem>();
-            this.destinationID = destinationID;
+            this.destination = destination;
         }
 
         // Updated constructor to accept a loader function for Items
-        public TransferOrder(SqlDataReader reader, Func<Guid, List<TransferOrderItem>> loadItems)
+        public TransferOrder(
+            SqlDataReader reader, 
+            Func<Guid, List<TransferOrderItem>> loadItems, 
+            Func<Guid, Location> loadDestination)
         {
             id = Guid.Parse(reader["ID"].ToString());
             orderDate = Convert.ToDateTime(reader["OrderDate"]);
@@ -51,6 +54,9 @@ namespace CoffeeCompanyMS.Models
 
             // Load the list of TransferOrderItem objects for this TransferOrder
             items = loadItems(id) ?? new List<TransferOrderItem>();
+
+            // Load the destination Location object for this TransferOrder
+            destination = loadDestination(Guid.Parse(reader["DestinationID"].ToString()));
         }
 
         public Guid Id { get => id; set => id = value; }
@@ -61,11 +67,8 @@ namespace CoffeeCompanyMS.Models
         public Guid RecurrenceID { get => recurrenceID; set => recurrenceID = value; }
         public int RecurrencePeriod { get => recurrencePeriod; set => recurrencePeriod = value; }
         public List<TransferOrderItem> Items { get => items; set => items = value; }
-        public Guid DestinationID
-        {
-            get => destinationID;
-            set => destinationID = value;
-        }
+        public Location Destination { get => destination; set => destination = value; }
+
 
         // Method to add an item to the TransferOrder
         public void AddItem(TransferOrderItem item)
@@ -84,6 +87,11 @@ namespace CoffeeCompanyMS.Models
             {
                 items.Remove(itemToRemove);
             }
+        }
+
+        public decimal CalculateTotalCost()
+        {
+            return items.Sum(item => item.CalculateTotalPrice());
         }
     }
 }

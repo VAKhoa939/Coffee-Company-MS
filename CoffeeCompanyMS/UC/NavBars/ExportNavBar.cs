@@ -19,7 +19,6 @@ namespace CoffeeCompanyMS.UC
     {
         private Button[] _buttons;
         private ExportOrdersPage _exportOrderPages;
-        private ExportOrderDetailsPage _exportOrderDetailsPage;
         private RecurringExportOrdersPage _recurringExportOrdersPage;
 
         public ExportNavBar()

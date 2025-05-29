@@ -10,6 +10,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
     public partial class ImportOrderDetailsPage : UserControl
     {
         private Guid selectedOrderID;
+        private TransferOrder order;
 
         public ImportOrderDetailsPage(Guid orderID)
         {
@@ -19,6 +20,8 @@ namespace CoffeeCompanyMS.UC.Pages.Import
 
         private void ImportOrderDetailsPage_Load(object sender, EventArgs e)
         {
+            var orderDAO = DAOManager.Instance.TransferOrderDAO;
+            order = orderDAO.GetTransferOrderById(selectedOrderID);
             LoadOrderSummary();
             LoadOrderItems();
         }
@@ -27,30 +30,12 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                var itemDAO = DAOManager.Instance.TransferOrderItemDAO;
-                var ingredientDAO = DAOManager.Instance.IngredientDAO;
                 var supplierDAO = DAOManager.Instance.SupplierDAO;
 
-                List<TransferOrderItem> items = itemDAO.GetItemsByTransferOrderId(selectedOrderID);
-                int itemCount = items.Count;
-
-                string supplierName = "Unknown";
-
-                if (itemCount > 0)
-                {
-                    Guid ingredientId = items[0].Ingredient.Id;
-
-                    Guid? supplierId = ingredientDAO.GetSupplierIdByIngredientId(ingredientId);
-                    if (supplierId.HasValue)
-                    {
-                        Supplier supplier = supplierDAO.GetSupplierById(supplierId.Value);
-                        supplierName = supplier?.Name ?? "Unknown";
-                    }
-                }
-
-                label2.Text = selectedOrderID.ToString();
-                label4.Text = supplierName;
-                label6.Text = itemCount.ToString();
+                lblOrderID.Text = selectedOrderID.ToString();
+                lblSupplierName.Text = supplierDAO.GetImportSupplierName(selectedOrderID);
+                lblItemCount.Text = order.Items.Count.ToString();
+                lblTotalCost.Text = "$ " + order.CalculateTotalCost().ToString("C2"); // Assuming UnitPrice is in decimal format
             }
             catch (Exception ex)
             {
@@ -62,9 +47,6 @@ namespace CoffeeCompanyMS.UC.Pages.Import
         {
             try
             {
-                var transferOrderItemDAO = DAOManager.Instance.TransferOrderItemDAO;
-                var items = transferOrderItemDAO.GetItemsByTransferOrderId(selectedOrderID);
-
                 var table = new DataTable();
                 table.Columns.Add("IngredientName", typeof(string));
                 table.Columns.Add("Quantity", typeof(int));
@@ -72,7 +54,7 @@ namespace CoffeeCompanyMS.UC.Pages.Import
                 table.Columns.Add("UnitPrice", typeof(decimal));
                 table.Columns.Add("ExpirationDate", typeof(DateTime));
 
-                foreach (var item in items)
+                foreach (var item in order.Items)
                 {
                     var ing = item.Ingredient;
                     table.Rows.Add(ing.Name, item.Quantity, ing.Unit, ing.UnitPrice, item.ExpirationDate);

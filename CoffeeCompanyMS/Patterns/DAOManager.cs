@@ -33,10 +33,11 @@ namespace CoffeeCompanyMS.Patterns
             // DAOs that depend on others
             var supplierDAO = new SupplierDAO(ingredientDAO);
             var transferOrderItemDAO = new TransferOrderItemDAO(ingredientDAO);
-            var transferOrderDAO = new TransferOrderDAO(transferOrderItemDAO);
             var batchDAO = new BatchDAO(ingredientDAO);
+
             var locationDAO = new LocationDAO(batchDAO);
             var userDAO = new UserDAO(locationDAO);
+            var transferOrderDAO = new TransferOrderDAO(transferOrderItemDAO, supplierDAO, locationDAO);
 
             // Assign all to instance
             Instance = new DAOManager
@@ -44,8 +45,8 @@ namespace CoffeeCompanyMS.Patterns
                 IngredientDAO = ingredientDAO,
                 SupplierDAO = supplierDAO,
                 TransferOrderItemDAO = transferOrderItemDAO,
-                TransferOrderDAO = transferOrderDAO,
                 BatchDAO = batchDAO,
+                TransferOrderDAO = transferOrderDAO,
                 LocationDAO = locationDAO,
                 UserDAO = userDAO,
             };
