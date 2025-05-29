@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using CoffeeCompanyMS.Navigations;
 using CoffeeCompanyMS.UC.NavBars;
 using CoffeeCompanyMS.UC.Pages.Import;
-using CoffeeCompanyMS.UC.Pages.Storage;
+using CoffeeCompanyMS.Forms.Authentication;
 
 namespace CoffeeCompanyMS.UC
 {
@@ -32,6 +32,16 @@ namespace CoffeeCompanyMS.UC
 
         private void LoadPages()
         {
+            // Check permissions before loading pages
+            var user = UserSession.Instance.LoggedInUser;
+            if (user.Location == null)
+            {
+                // If the user has no location (not a CompanyOwner or Admin),
+                // disable the button to
+                // Reccuring Orders page and Create Import Order form
+                btnRecurringOrders.Enabled = false;
+            }
+
             _importOrderPage = new ImportOrdersPage();
             _recurringImportOrdersPage = new RecurringImportOrdersPage();
 

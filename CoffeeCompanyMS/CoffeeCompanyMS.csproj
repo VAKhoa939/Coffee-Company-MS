@@ -360,6 +360,12 @@
     <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UC\OtherComponents\StoreBranchSelector.resx">
+      <DependentUpon>StoreBranchSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UC\OtherComponents\WarehouseSelector.resx">
+      <DependentUpon>WarehouseSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UC\Pages\Export\ExportOrderDetailsPage.resx">
       <DependentUpon>ExportOrderDetailsPage.cs</DependentUpon>
     </EmbeddedResource>

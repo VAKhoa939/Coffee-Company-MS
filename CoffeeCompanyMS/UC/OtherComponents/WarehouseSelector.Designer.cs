@@ -37,9 +37,9 @@ namespace CoffeeCompanyMS.UC
             this.cbbLocation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbbLocation.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cbbLocation.FormattingEnabled = true;
-            this.cbbLocation.Location = new System.Drawing.Point(182, 0);
+            this.cbbLocation.Location = new System.Drawing.Point(214, 0);
             this.cbbLocation.Name = "cbbLocation";
-            this.cbbLocation.Size = new System.Drawing.Size(411, 29);
+            this.cbbLocation.Size = new System.Drawing.Size(379, 30);
             this.cbbLocation.TabIndex = 0;
             this.cbbLocation.SelectedIndexChanged += new System.EventHandler(this.cbbLocation_SelectedIndexChanged);
             // 
@@ -49,7 +49,7 @@ namespace CoffeeCompanyMS.UC
             this.label1.Font = new System.Drawing.Font("Microsoft Tai Le", 10.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(12, 3);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(164, 22);
+            this.label1.Size = new System.Drawing.Size(157, 22);
             this.label1.TabIndex = 1;
             this.label1.Text = "Source Warehouse";
             // 
@@ -65,6 +65,7 @@ namespace CoffeeCompanyMS.UC
             this.Load += new System.EventHandler(this.WarehouseSelector_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         #endregion

@@ -19,21 +19,17 @@ namespace CoffeeCompanyMS.UI
         public Main()
         {
             InitializeComponent();
-            NavigationManager.Initialize(this.subNavPanel, this.pageAreaPanel);
-            LoadMainNav();
         }
         
         private void Main_Load(object sender, EventArgs e)
         {
-
-        }
-
-        private void LoadMainNav()
-        {
-            UserControl mainNav;
             User user = UserSession.Instance.LoggedInUser;
 
             if (user == null) return;
+
+            NavigationManager.Initialize(this.subNavPanel, this.pageAreaPanel);
+
+            UserControl mainNav;
 
             switch (user.Role)
             {

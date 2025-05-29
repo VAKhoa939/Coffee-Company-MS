@@ -57,6 +57,11 @@ namespace CoffeeCompanyMS.Models
             get => ingredient;
             set => ingredient = value;
         }
+
+        public decimal CalculateTotalPrice()
+        {
+            return ingredient.UnitPrice * quantity;
+        }
     }
 
 }

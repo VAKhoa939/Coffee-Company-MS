@@ -170,6 +170,9 @@ namespace CoffeeCompanyMS.UI.Import
                     return;
                 }
 
+                var locationDAO = DAOManager.Instance.LocationDAO;
+                var selectedLocation = locationDAO.GetLocationById(selectedLocationID);
+
                 // Create transfer order
                 var transferOrder = new TransferOrder(
                     id: Guid.NewGuid(),
@@ -180,7 +183,7 @@ namespace CoffeeCompanyMS.UI.Import
                     recurrenceID: checkBox1.Checked ? Guid.NewGuid() : Guid.Empty,
                     recurrencePeriod: checkBox1.Checked ? (int)numericUpDown1.Value : 0,
                     items: new List<TransferOrderItem>(),
-                    destinationID: selectedLocationID
+                    destination: selectedLocation
                 );
 
                 // Add items to transfer order

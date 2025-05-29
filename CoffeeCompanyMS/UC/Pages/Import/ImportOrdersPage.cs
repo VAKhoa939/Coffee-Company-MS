@@ -92,25 +92,33 @@ namespace CoffeeCompanyMS.UC.Pages.Import
                 // Set the selected values for each comboboxes
                 foreach (DataGridViewRow row in dataGridViewImportOrder.Rows)
                 {
-                    if (row.Cells["Status"] is DataGridViewComboBoxCell cell && row.DataBoundItem != null)
+                    if (row.Cells["Status"] is DataGridViewComboBoxCell cell && row.DataBoundItem is ImportOrderDTO dto)
                     {
-                        DataRowView dataRowView = row.DataBoundItem as DataRowView;
-                        if (dataRowView != null)
+                        if (!string.IsNullOrEmpty(dto.Status))
                         {
-                            string currentStatus = dataRowView["Status"].ToString();
-                            if (!string.IsNullOrEmpty(currentStatus))
-                            {
-                                cell.Value = currentStatus;
-                            }
+                            cell.Value = dto.Status;
                         }
                     }
                 }
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error setting up Status ComboBox: " + ex.Message);
             }
         }
+
+        private void dataGridViewImportOrder_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (dataGridViewImportOrder.CurrentCell.ColumnIndex == dataGridViewImportOrder.Columns["Status"].Index)
+            {
+                if (e.Control is ComboBox cb)
+                {
+                    cb.DropDownStyle = ComboBoxStyle.DropDownList;
+                }
+            }
+        }
+
 
         /// <summary>
         /// Handles the CellValueChanged event of the dataGridViewImportOrder control,
