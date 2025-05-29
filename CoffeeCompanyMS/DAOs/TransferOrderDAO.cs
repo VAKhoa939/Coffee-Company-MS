@@ -59,14 +59,15 @@ namespace CoffeeCompanyMS.DAOs
 
         // Insert with all fields including RecurrenceID
         // used for re-newing recurring orders
-        public bool InsertTransferOrder(DateTime orderDate, DateTime estimatedDeliveryDate, string status, Guid recurrenceId, int recurrencePeriod, Guid destinationId)
+        public bool InsertTransferOrder(Guid id, DateTime orderDate, DateTime estimatedDeliveryDate, string status, Guid recurrenceId, int recurrencePeriod, Guid destinationId)
         {
             string query = @"
-        INSERT INTO TransferOrder (OrderDate, EstimatedDeliveryDate, ActualDeliveryDate, Status, RecurrenceID, RecurrencePeriod, DestinationID)
-        VALUES (@OrderDate, @EstimatedDeliveryDate, @ActualDeliveryDate, @Status, @RecurrenceID, @RecurrencePeriod, @DestinationID)";
+        INSERT INTO TransferOrder (ID, OrderDate, EstimatedDeliveryDate, Status, RecurrenceID, RecurrencePeriod, DestinationID)
+        VALUES (@ID, @OrderDate, @EstimatedDeliveryDate, @Status, @RecurrenceID, @RecurrencePeriod, @DestinationID)";
 
             var parameters = new Dictionary<string, object>
             {
+                ["ID"] = id,
                 ["@OrderDate"] = orderDate,
                 ["@EstimatedDeliveryDate"] = estimatedDeliveryDate,
                 ["@Status"] = status,
@@ -315,6 +316,7 @@ namespace CoffeeCompanyMS.DAOs
             try
             {
                 bool success = InsertTransferOrder(
+                    order.Id,
                     order.OrderDate,
                     order.EstimatedDeliveryDate,
                     order.Status,

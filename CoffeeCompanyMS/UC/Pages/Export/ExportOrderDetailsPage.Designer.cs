@@ -139,6 +139,7 @@
             // 
             // dgvExportItems
             // 
+            this.dgvExportItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dgvExportItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvExportItems.Location = new System.Drawing.Point(67, 179);
             this.dgvExportItems.Name = "dgvExportItems";

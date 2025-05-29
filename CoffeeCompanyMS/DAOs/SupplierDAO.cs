@@ -39,11 +39,12 @@ namespace CoffeeCompanyMS.DAOs
         public bool InsertSupplier(Supplier supplier)
         {
             string query = @"
-        INSERT INTO Supplier (ContractStartDate, Name, PhoneNum, OwnerName, Email, Address)
-        VALUES (@ContractStartDate, @Name, @PhoneNum, @OwnerName, @Email, @Address)";
+        INSERT INTO Supplier (ID, ContractStartDate, Name, PhoneNum, OwnerName, Email, Address)
+        VALUES (@ID, @ContractStartDate, @Name, @PhoneNum, @OwnerName, @Email, @Address)";
 
             var parameters = new Dictionary<string, object>
             {
+                ["@ID"] = supplier.Id,
                 ["@ContractStartDate"] = supplier.ContractStartDate,
                 ["@Name"] = supplier.Name,
                 ["@PhoneNum"] = supplier.PhoneNum,

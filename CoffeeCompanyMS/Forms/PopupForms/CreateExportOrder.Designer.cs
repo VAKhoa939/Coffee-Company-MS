@@ -75,20 +75,22 @@
             // DTPDeliveryDate
             // 
             this.DTPDeliveryDate.CustomFormat = "yyyy-MM-dd";
-            this.DTPDeliveryDate.Location = new System.Drawing.Point(228, 188);
+            this.DTPDeliveryDate.Location = new System.Drawing.Point(266, 188);
             this.DTPDeliveryDate.Name = "DTPDeliveryDate";
-            this.DTPDeliveryDate.Size = new System.Drawing.Size(200, 22);
+            this.DTPDeliveryDate.Size = new System.Drawing.Size(251, 22);
             this.DTPDeliveryDate.TabIndex = 7;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(228, 228);
+            this.numericUpDown1.Location = new System.Drawing.Point(336, 228);
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(196, 22);
+            this.numericUpDown1.Size = new System.Drawing.Size(103, 22);
             this.numericUpDown1.TabIndex = 8;
+            this.numericUpDown1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // dataGridViewIngredients
             // 
+            this.dataGridViewIngredients.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridViewIngredients.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewIngredients.Location = new System.Drawing.Point(12, 267);
             this.dataGridViewIngredients.Name = "dataGridViewIngredients";
@@ -140,6 +142,7 @@
             this.Controls.Add(this.checkBox1);
             this.Name = "CreateExportOrder";
             this.Text = "CreateExportOrder";
+            this.Load += new System.EventHandler(this.CreateExportOrder_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewIngredients)).EndInit();
             this.ResumeLayout(false);
